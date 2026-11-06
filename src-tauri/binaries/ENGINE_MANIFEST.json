@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-11-01T08:09:25.000Z",
+  "engines": [
+    {
+      "name": "yt-dlp",
+      "version": "2026.10.26",
+      "file": "yt-dlp-x86_64-pc-windows-msvc.exe",
+      "sha256": "3a1762538828dc20949d4e679d1c5994c39778af34c5cfa62247ecdc1e894bd7",
+      "license": "Unlicense",
+      "source": "https://github.com/yt-dlp/yt-dlp",
+      "build": "PyInstaller one-file from PyPI yt-dlp==2026.10.26"
+    },
+    {
+      "name": "ffmpeg",
+      "version": "7.1-essentials_build-www.gyan.dev",
+      "file": "ffmpeg-x86_64-pc-windows-msvc.exe",
+      "sha256": "2ce797a0f88d7f067180338fb227f7b1928ea727bd9a4d7a1d022f7c52af71a3",
+      "license": "GPL-3.0-or-later",
+      "source": "https://ffmpeg.org/",
+      "build": "gyan.dev essentials build"
+    }
+  ]
+}

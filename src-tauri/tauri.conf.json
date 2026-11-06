@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "BiliPocket",
+  "version": "0.9.0",
+  "identifier": "com.bilipocket.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev:web",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../src"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "BiliPocket · 轻量哔哩下载器",
+        "width": 1280,
+        "height": 780,
+        "minWidth": 1040,
+        "minHeight": 700,
+        "center": true,
+        "resizable": true,
+        "decorations": false,
+        "shadow": true,
+        "backgroundColor": "#fafafa"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data:; style-src 'self'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost; object-src 'none'; base-uri 'self'",
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$APPDATA/covers/**",
+          "$APPLOCALDATA/covers/**"
+        ]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "resources": [
+      "../LICENSES/*",
+      "binaries/ENGINE_MANIFEST.json",
+      "update-source.txt",
+      "binaries/yt-dlp-x86_64-pc-windows-msvc.exe",
+      "binaries/ffmpeg-x86_64-pc-windows-msvc.exe"
+    ],
+    "shortDescription": "本地优先的哔哩哔哩下载器",
+    "longDescription": "BiliPocket 使用本地 yt-dlp + ffmpeg 引擎下载你有权保存的哔哩哔哩内容；队列、历史与设置保存在本机，不包含 DRM 或付费内容绕过。",
+    "copyright": "BiliPocket · Unaffiliated with Bilibili",
+    "windows": {
+      "nsis": {
+        "installerHooks": "nsis-hooks.nsh"
+      }
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENCNDc5QzE0Nzk4NTUyREMKUldUY1VvVjVGSnhIeTB4Uk5JTEFUcTJWZ2hBVjVVVVFnbmQyc3B2dndRMDBwZ0k0TFJGTjV1SzMK",
+      "endpoints": [],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

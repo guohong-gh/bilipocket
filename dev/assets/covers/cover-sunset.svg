@@ -1,0 +1,91 @@
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="480" y1="0" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#241631"/>
+      <stop offset="0.4" stop-color="#6D3559"/>
+      <stop offset="0.68" stop-color="#D9685D"/>
+      <stop offset="0.86" stop-color="#FFA272"/>
+      <stop offset="1" stop-color="#FFD29B"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(688 318) scale(250 250)">
+      <stop stop-color="#FFEAC1" stop-opacity="0.85"/>
+      <stop offset="0.5" stop-color="#FFC58C" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#FFC58C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sea" x1="480" y1="352" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7A4253"/>
+      <stop offset="0.55" stop-color="#3A2638"/>
+      <stop offset="1" stop-color="#17111E"/>
+    </linearGradient>
+    <linearGradient id="cliff" x1="150" y1="370" x2="230" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#231A26"/>
+      <stop offset="1" stop-color="#0D0A11"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(480 270) scale(620 420)">
+      <stop offset="0.55" stop-color="#08060A" stop-opacity="0"/>
+      <stop offset="1" stop-color="#08060A" stop-opacity="0.42"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="960" height="540">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.07"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="960" height="540" fill="url(#sky)"/>
+  <ellipse cx="688" cy="318" rx="330" ry="220" fill="url(#sunGlow)"/>
+
+  <g opacity="0.5" filter="url(#soft)">
+    <path d="M-40 232C120 190 250 240 372 218C508 194 566 140 702 166C814 188 874 238 1000 210V266H-40V232Z" fill="#FFC0A3" opacity="0.35"/>
+    <path d="M-20 292C130 252 246 300 380 278C520 254 620 208 780 238C870 254 924 280 990 268V312H-20V292Z" fill="#FFD7B8" opacity="0.22"/>
+  </g>
+
+  <circle cx="688" cy="318" r="86" fill="#FFF1CB"/>
+  <circle cx="688" cy="318" r="86" fill="url(#sunGlow)"/>
+
+  <path d="M0 354H960V540H0V354Z" fill="url(#sea)"/>
+  <path d="M0 354H960" stroke="#FFD9AF" stroke-opacity="0.55" stroke-width="1.5"/>
+
+  <g opacity="0.72">
+    <rect x="646" y="370" width="84" height="5" rx="2.5" fill="#FFE0B8" opacity="0.8"/>
+    <rect x="662" y="386" width="52" height="4" rx="2" fill="#FFD3A6" opacity="0.65"/>
+    <rect x="680" y="401" width="32" height="4" rx="2" fill="#FFC893" opacity="0.5"/>
+    <rect x="608" y="420" width="144" height="3" rx="1.5" fill="#E9A887" opacity="0.25"/>
+    <rect x="630" y="446" width="102" height="3" rx="1.5" fill="#E9A887" opacity="0.18"/>
+    <rect x="588" y="478" width="198" height="2.5" rx="1.25" fill="#E9A887" opacity="0.12"/>
+  </g>
+
+  <g opacity="0.3" stroke="#FFE6C8" stroke-width="1.6" stroke-linecap="round">
+    <path d="M56 386C104 382 142 388 196 384"/>
+    <path d="M94 408C150 403 202 410 252 405"/>
+    <path d="M468 386C508 383 540 387 586 384"/>
+    <path d="M432 412C472 409 512 414 548 410"/>
+  </g>
+
+  <path d="M0 540V392C42 380 96 376 138 394C190 416 204 454 252 466C306 480 344 446 396 466C430 480 448 510 464 540H0Z" fill="url(#cliff)"/>
+  <g stroke="#2F2230" stroke-width="2" stroke-linecap="round" opacity="0.8">
+    <path d="M34 420C54 404 62 388 58 366"/>
+    <path d="M70 428C86 410 96 396 96 372"/>
+    <path d="M112 438C126 424 140 412 142 392"/>
+    <path d="M152 448C166 436 180 428 188 410"/>
+  </g>
+
+  <g stroke="#FFDFC6" stroke-opacity="0.7" stroke-width="1.8" stroke-linecap="round">
+    <path d="M802 206C812 200 820 200 828 205C820 207 810 209 802 206Z"/>
+    <path d="M846 188C856 182 864 182 872 187C864 189 854 191 846 188Z"/>
+  </g>
+
+  <g>
+    <text x="56" y="76" fill="#FFE8D2" fill-opacity="0.78" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="4">FIELD NOTE / 027</text>
+    <text x="52" y="424" fill="#FFF3E4" font-family="'Microsoft YaHei UI','PingFang SC',sans-serif" font-size="58" font-weight="700" letter-spacing="3">落日以后</text>
+    <text x="56" y="462" fill="#FFE3C9" fill-opacity="0.66" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="5">AFTER THE SUNSET · 08:42</text>
+  </g>
+
+  <rect width="960" height="540" fill="url(#vignette)"/>
+  <rect width="960" height="540" filter="url(#grain)" opacity="0.8"/>
+</svg>

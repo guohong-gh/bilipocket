@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fafafa" />
+    <title>BiliPocket · 轻量哔哩下载器</title>
+    <script src="./js/theme-boot.js"></script>
+    <link rel="icon" type="image/svg+xml" href="./assets/logo.svg" />
+    <link rel="stylesheet" href="./styles/tokens.css" />
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/shell.css" />
+    <link rel="stylesheet" href="./styles/components.css" />
+    <link rel="stylesheet" href="./styles/pages.css" />
+  </head>
+  <body>
+    <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <symbol id="i-link" viewBox="0 0 24 24">
+          <path d="M10.2 13.8a4.5 4.5 0 0 0 6.4 0l2.5-2.5a4.5 4.5 0 0 0-6.4-6.4l-1.3 1.3" />
+          <path d="M13.8 10.2a4.5 4.5 0 0 0-6.4 0l-2.5 2.5a4.5 4.5 0 0 0 6.4 6.4l1.3-1.3" />
+        </symbol>
+        <symbol id="i-clipboard" viewBox="0 0 24 24">
+          <rect x="8" y="3" width="8" height="4" rx="1.5" />
+          <path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" />
+          <path d="M8 12h8M8 16h5" />
+        </symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24">
+          <path d="M13.2 2.5 4.5 13.4a.8.8 0 0 0 .6 1.3h5.3l-1.1 6.7a.8.8 0 0 0 1.3.7l8.9-11.3a.8.8 0 0 0-.6-1.3h-5.4l1.2-6.3a.8.8 0 0 0-1.5-.7Z" />
+        </symbol>
+        <symbol id="i-download" viewBox="0 0 24 24">
+          <path d="M12 3v11.5" />
+          <path d="m7.2 10.2 4.8 4.8 4.8-4.8" />
+          <path d="M5 20.5h14" />
+        </symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24">
+          <rect x="3.5" y="4" width="17" height="4.2" rx="1.6" />
+          <rect x="3.5" y="10.2" width="17" height="4.2" rx="1.6" />
+          <path d="M6.5 18h11" />
+        </symbol>
+        <symbol id="i-history" viewBox="0 0 24 24">
+          <path d="M3.2 12a8.8 8.8 0 1 0 2.6-6.3L3 8.4" />
+          <path d="M3 3.5v5h5" />
+          <path d="M12 7.5V12l3 2" />
+        </symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24">
+          <path d="M4 7h7M16.5 7H20M4 17h3.5M13 17h7" />
+          <circle cx="13.7" cy="7" r="2.3" />
+          <circle cx="10.3" cy="17" r="2.3" />
+        </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+          <path d="M12 2.8 4.6 5.9v5.5c0 4.4 3.1 8 7.4 9.5 4.3-1.5 7.4-5.1 7.4-9.5V5.9L12 2.8Z" />
+        </symbol>
+        <symbol id="i-shield-check" viewBox="0 0 24 24">
+          <path d="M12 2.8 4.6 5.9v5.5c0 4.4 3.1 8 7.4 9.5 4.3-1.5 7.4-5.1 7.4-9.5V5.9L12 2.8Z" />
+          <path d="m8.6 11.9 2.3 2.3 4.6-4.7" />
+        </symbol>
+        <symbol id="i-info" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5M12 7.6h.01" />
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 24 24">
+          <path d="M8.2 5.4v13.2c0 .8.9 1.3 1.6.9l10-6.6a1.1 1.1 0 0 0 0-1.8l-10-6.6a1.1 1.1 0 0 0-1.6.9Z" fill="currentColor" stroke="none" />
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24">
+          <rect x="6.8" y="5" width="3.6" height="14" rx="1.4" fill="currentColor" stroke="none" />
+          <rect x="13.6" y="5" width="3.6" height="14" rx="1.4" fill="currentColor" stroke="none" />
+        </symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24">
+          <path d="M4 7h16M9.2 7V5.5A1.5 1.5 0 0 1 10.7 4h2.6a1.5 1.5 0 0 1 1.5 1.5V7" />
+          <path d="m6.2 7 .8 12a2 2 0 0 0 2 1.9h6a2 2 0 0 0 2-1.9l.8-12" />
+          <path d="M10 11v5.5M14 11v5.5" />
+        </symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24">
+          <path d="M20 11a8 8 0 1 0-2.2 6.2" />
+          <path d="M20 4.5V11h-6.5" />
+        </symbol>
+        <symbol id="i-folder" viewBox="0 0 24 24">
+          <path d="M3.2 7.2A2.2 2.2 0 0 1 5.4 5h3.8l2 2h7.4a2.2 2.2 0 0 1 2.2 2.2v7.6a2.2 2.2 0 0 1-2.2 2.2H5.4a2.2 2.2 0 0 1-2.2-2.2V7.2Z" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+          <path d="m5 12.2 4.4 4.4L19 6.8" />
+        </symbol>
+        <symbol id="i-x" viewBox="0 0 24 24">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+          <rect x="5" y="10" width="14" height="10" rx="2" />
+          <path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10" />
+        </symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24">
+          <path d="M10.3 4.2 2.9 17.1a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0Z" />
+          <path d="M12 9.2v4.2M12 17h.01" />
+        </symbol>
+        <symbol id="i-music" viewBox="0 0 24 24">
+          <path d="M9 18V6.3l10-2.1V15" />
+          <circle cx="6.3" cy="18" r="2.8" />
+          <circle cx="16.3" cy="15" r="2.8" />
+        </symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8.7" />
+          <path d="M12 7.4V12l3.1 1.8" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+          <circle cx="10.8" cy="10.8" r="6.8" />
+          <path d="m16 16 4.7 4.7" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.5v2.2M12 19.3v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6" />
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24">
+          <path d="M20.3 14.4A8.7 8.7 0 0 1 9.6 3.7a8.7 8.7 0 1 0 10.7 10.7Z" />
+        </symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="12.5" rx="2" />
+          <path d="M9 20h6M12 16.5V20" />
+        </symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24">
+          <path d="M18 8.6a6 6 0 1 0-12 0c0 6.3-2.5 7-2.5 8.9h17c0-1.9-2.5-2.6-2.5-8.9Z" />
+          <path d="M9.8 21h4.4" />
+        </symbol>
+        <symbol id="i-database" viewBox="0 0 24 24">
+          <ellipse cx="12" cy="5.8" rx="7.8" ry="2.9" />
+          <path d="M4.2 5.8v6c0 1.6 3.5 2.9 7.8 2.9s7.8-1.3 7.8-2.9v-6" />
+          <path d="M4.2 11.8v6c0 1.6 3.5 2.9 7.8 2.9s7.8-1.3 7.8-2.9v-6" />
+        </symbol>
+        <symbol id="i-sparkles" viewBox="0 0 24 24">
+          <path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z" />
+          <path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z" />
+        </symbol>
+        <symbol id="i-chevron-right" viewBox="0 0 24 24">
+          <path d="m9.5 6 6 6-6 6" />
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </symbol>
+        <symbol id="i-minus" viewBox="0 0 24 24">
+          <path d="M5 12h14" />
+        </symbol>
+        <symbol id="i-minimize" viewBox="0 0 24 24">
+          <path d="M5 12h14" />
+        </symbol>
+        <symbol id="i-maximize" viewBox="0 0 24 24">
+          <rect x="5.5" y="5.5" width="13" height="13" rx="1.4" />
+        </symbol>
+        <symbol id="i-restore" viewBox="0 0 24 24">
+          <rect x="8.5" y="8.5" width="10.5" height="10.5" rx="1.4" />
+          <path d="M5.5 15.5h-.4a1.6 1.6 0 0 1-1.6-1.6V5.6A1.6 1.6 0 0 1 5.1 4h8.3a1.6 1.6 0 0 1 1.6 1.6v.4" />
+        </symbol>
+        <symbol id="i-wifi-off" viewBox="0 0 24 24">
+          <path d="M2.5 2.5 21.5 21.5" />
+          <path d="M8.8 8.8A10 10 0 0 1 21 9.7M5.2 12.5a10 10 0 0 1 2.3-1.2M8.7 16a5 5 0 0 1 6.6 0M12 20h.01" />
+        </symbol>
+        <symbol id="i-arrow-right" viewBox="0 0 24 24">
+          <path d="M4.5 12h15M13.5 6l6 6-6 6" />
+        </symbol>
+        <symbol id="i-arrow-up" viewBox="0 0 24 24">
+          <path d="M12 19V5M6 11l6-6 6 6" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <span class="brand-mark" aria-hidden="true"><svg class="icon"><use href="#i-download"></use></svg></span>
+          <div class="brand-copy">
+            <div class="brand-name">BiliPocket</div>
+            <div class="brand-sub">轻量哔哩下载器</div>
+          </div>
+          <span class="brand-tag" id="brand-tag">桌面版</span>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="主导航">
+          <div class="nav-section-label">工作台</div>
+          <button class="nav-item is-active" type="button" data-route="download" aria-current="page" aria-label="下载" title="下载">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+            <span>下载</span>
+          </button>
+          <button class="nav-item" type="button" data-route="queue" aria-label="下载队列" title="下载队列">
+            <svg class="icon" aria-hidden="true"><use href="#i-layers"></use></svg>
+            <span>下载队列</span>
+            <span class="nav-badge" id="nav-queue-count" hidden>0</span>
+          </button>
+          <button class="nav-item" type="button" data-route="history" aria-label="历史记录" title="历史记录">
+            <svg class="icon" aria-hidden="true"><use href="#i-history"></use></svg>
+            <span>历史记录</span>
+          </button>
+
+          <div class="nav-section-label nav-section-spaced">其他</div>
+          <button class="nav-item" type="button" data-route="settings" aria-label="设置" title="设置">
+            <svg class="icon" aria-hidden="true"><use href="#i-settings"></use></svg>
+            <span>设置</span>
+          </button>
+          <button class="nav-item" type="button" data-route="about" aria-label="关于与合规" title="关于与合规">
+            <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
+            <span>关于与合规</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <button class="local-card" type="button" data-route="about" aria-label="本地优先：查看合规说明" title="本地优先">
+            <span class="local-card-icon">
+              <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+            </span>
+            <span class="local-card-copy">
+              <strong>本地优先</strong>
+              <span id="local-card-copy">不上传 · 本地保存 · 真实下载</span>
+            </span>
+            <svg class="icon local-card-arrow" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+          </button>
+          <div class="sidebar-foot">
+            <span id="app-version">v0.9.0 · Desktop</span>
+            <span class="local-indicator"><i></i>本地</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="titlebar" data-tauri-drag-region>
+          <div class="tb-heading" id="tb-heading" data-tauri-drag-region>
+            <h1 id="page-title" data-tauri-drag-region tabindex="-1">下载</h1>
+            <p id="page-subtitle" data-tauri-drag-region>解析链接，选择清晰度，加入本地队列</p>
+          </div>
+
+          <div class="tb-tools">
+            <form class="quick-parse" id="quick-parse-form" hidden>
+              <svg class="icon" aria-hidden="true"><use href="#i-link"></use></svg>
+              <input id="quick-input" type="text" placeholder="快速解析链接 / BV 号" autocomplete="off" spellcheck="false" aria-label="快速解析链接" />
+              <kbd>Enter</kbd>
+            </form>
+
+            <div class="status-pill" title="解析与下载由本地引擎执行">
+              <span class="status-dot"></span>
+              <span id="status-pill-label">本地下载</span>
+            </div>
+
+            <button class="tb-icon-btn" type="button" id="theme-toggle" title="切换主题" aria-label="切换主题">
+              <svg class="icon" id="theme-toggle-icon" aria-hidden="true"><use href="#i-sun"></use></svg>
+            </button>
+
+            <div class="tb-divider" aria-hidden="true"></div>
+
+            <div class="window-controls">
+              <button class="win-btn" type="button" id="win-min" title="最小化" aria-label="最小化窗口">
+                <svg class="icon" aria-hidden="true"><use href="#i-minimize"></use></svg>
+              </button>
+              <button class="win-btn" type="button" id="win-max" title="最大化" aria-label="最大化窗口">
+                <svg class="icon" aria-hidden="true"><use id="win-max-icon" href="#i-maximize"></use></svg>
+              </button>
+              <button class="win-btn win-close" type="button" id="win-close" title="关闭" aria-label="关闭窗口">
+                <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="content" id="content">
+          <div class="content-inner">
+            <section class="page is-active" data-page="download" id="page-download">
+              <div class="page-stack">
+                <section class="composer" aria-labelledby="composer-title">
+                  <div class="composer-head">
+                    <div>
+                      <h2 id="composer-title">粘贴一条视频链接</h2>
+                      <p>支持单视频页面、b23.tv 短链、BV 号与 av 号。</p>
+                    </div>
+                    <span class="demo-badge" id="mode-badge"><i></i><span id="mode-badge-label">真实解析 · 文件写入本机</span></span>
+                  </div>
+
+                  <form class="composer-form" id="parse-form" novalidate>
+                    <div class="url-field" id="url-field">
+                      <span class="url-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#i-link"></use></svg>
+                      </span>
+                      <input
+                        id="url-input"
+                        type="text"
+                        placeholder="粘贴视频链接或 BV 号，如 BV1xx411c7mD"
+                        autocomplete="off"
+                        spellcheck="false"
+                        aria-label="视频链接或 BV 号"
+                        aria-describedby="parse-hint"
+                      />
+                      <button class="paste-btn" type="button" id="paste-btn">
+                        <svg class="icon" aria-hidden="true"><use href="#i-clipboard"></use></svg>
+                        粘贴
+                      </button>
+                    </div>
+                    <button class="btn btn-primary parse-btn" type="submit" id="parse-btn">
+                      <span class="btn-spinner" hidden aria-hidden="true"></span>
+                      <svg class="icon btn-icon" aria-hidden="true"><use href="#i-bolt"></use></svg>
+                      <span class="btn-label">解析视频</span>
+                    </button>
+                  </form>
+
+                  <p class="field-error" id="field-error" hidden>
+                    <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+                    <span id="field-error-text">没有识别到有效的视频链接</span>
+                  </p>
+
+                  <div class="composer-foot">
+                    <!-- dev-slot:samples -->
+                    <div class="privacy-hint" id="parse-hint">
+                      <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
+                      <span id="privacy-hint-label">链接仅发送至哔哩哔哩</span>
+                    </div>
+                  </div>
+                </section>
+
+                <div id="parse-stage" aria-live="polite">
+                  <div class="stage" id="stage-idle">
+                    <div class="home-grid">
+                      <section class="panel recent-panel">
+                        <div class="panel-head">
+                          <div>
+                            <h3>最近完成</h3>
+                            <p>点击记录，可以再次加入队列</p>
+                          </div>
+                          <button class="link-btn" type="button" data-route="history">
+                            全部历史
+                            <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+                          </button>
+                        </div>
+                        <div class="recent-list" id="recent-list"></div>
+                      </section>
+
+                      <div class="home-side">
+                        <aside class="panel local-panel">
+                        <h3>留在自己的设备上</h3>
+                        <p>队列、历史与设置只存储在本机。这个原型不登录、不上传，也不会下载任何文件。</p>
+                        <ul class="mini-checks">
+                          <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>无账号与云端同步</li>
+                          <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>可随时清空本地记录</li>
+                          <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>完成时发送模拟通知</li>
+                        </ul>
+                        <button class="link-btn" type="button" data-route="about">
+                          查看合规说明
+                          <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+                        </button>
+                      </aside>
+
+                      <section class="home-activity" id="home-activity" aria-label="队列动态" hidden>
+                        <div class="activity-head">
+                          <span class="activity-status">
+                            <i class="activity-pulse" id="activity-pulse"></i>
+                            <strong id="activity-title">正在下载</strong>
+                          </span>
+                          <span class="activity-speed" id="activity-speed"></span>
+                          <button class="link-btn" type="button" data-route="queue">
+                            打开下载队列
+                            <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+                          </button>
+                        </div>
+                        <div class="activity-items" id="activity-items"></div>
+                      </section>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="stage" id="stage-loading" hidden>
+                    <div class="parse-loading-head">
+                      <span class="spinner" aria-hidden="true"></span>
+                      <span>正在解析视频信息</span>
+                    </div>
+                    <div class="result-skeleton" aria-hidden="true">
+                      <div class="sk-media shimmer"></div>
+                      <div class="sk-main">
+                        <div class="sk-line shimmer"></div>
+                        <div class="sk-line shimmer"></div>
+                        <div class="sk-line shimmer"></div>
+                        <div class="sk-line shimmer"></div>
+                        <div class="sk-line shimmer"></div>
+                        <div class="sk-qualities">
+                          <div class="sk-box shimmer"></div>
+                          <div class="sk-box shimmer"></div>
+                          <div class="sk-box shimmer"></div>
+                          <div class="sk-box shimmer"></div>
+                        </div>
+                        <div class="sk-line shimmer"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="stage" id="stage-result" hidden></div>
+
+                  <div class="stage" id="stage-error" hidden>
+                    <div class="error-panel">
+                      <span class="error-icon">
+                        <svg class="icon" aria-hidden="true"><use href="#i-wifi-off"></use></svg>
+                      </span>
+                      <div class="error-copy">
+                        <h3>这次没有解析成功</h3>
+                        <p class="error-reason" id="error-reason">链接格式不正确，请检查后重试。</p>
+                        <ul class="error-tips">
+                          <li>支持单视频页面、b23.tv 短链、BV 号或 av 号</li>
+                          <li>不处理直播、空间、合集或番剧等非单视频链接</li>
+                          <li>也可以点击上方示例，快速体验完整流程</li>
+                        </ul>
+                      </div>
+                      <div class="error-actions">
+                        <button class="btn btn-primary btn-sm" type="button" id="retry-parse">
+                          <svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg>
+                          重试
+                        </button>
+                        <button class="btn btn-ghost btn-sm" type="button" id="reset-parse">
+                          换个链接
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="page" data-page="queue" id="page-queue" hidden>
+              <div class="page-toolbar">
+                <div class="queue-stats" id="queue-stats"></div>
+                <div class="toolbar-actions">
+                  <button class="btn btn-ghost btn-sm" type="button" id="pause-all">
+                    <svg class="icon" aria-hidden="true"><use href="#i-pause"></use></svg>
+                    全部暂停
+                  </button>
+                  <button class="btn btn-ghost btn-sm" type="button" id="resume-all">
+                    <svg class="icon" aria-hidden="true"><use href="#i-play"></use></svg>
+                    全部继续
+                  </button>
+                  <span class="toolbar-divider" aria-hidden="true"></span>
+                  <button class="btn btn-quiet btn-sm" type="button" id="clear-completed">
+                    <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+                    清除已完成
+                  </button>
+                  <span class="toolbar-divider" aria-hidden="true"></span>
+                  <button class="btn btn-quiet btn-sm danger-quiet" type="button" id="clear-queue">
+                    <svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>
+                    清空队列
+                  </button>
+                </div>
+              </div>
+              <div class="queue-live" id="queue-live" hidden>
+                <span class="queue-live-dot" aria-hidden="true"></span>
+                <span id="queue-live-summary"></span>
+              </div>
+              <h2 class="sr-only">下载任务</h2>
+              <div id="queue-content"></div>
+              <p class="inline-note">
+                <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+                这里是模拟队列：暂停会保留进度，失败可以重试。不会写入磁盘，也不会占用带宽。
+              </p>
+            </section>
+
+            <section class="page" data-page="history" id="page-history" hidden>
+              <div class="page-toolbar">
+                <div class="history-toolbar-main">
+                  <label class="search-field" for="history-search">
+                    <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+                    <input
+                      id="history-search"
+                      type="text"
+                      placeholder="搜索标题、UP 主或 BV 号"
+                      autocomplete="off"
+                      spellcheck="false"
+                      aria-label="搜索历史记录"
+                    />
+                    <button class="search-clear" type="button" id="history-search-clear" aria-label="清除搜索" hidden>
+                      <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+                    </button>
+                  </label>
+                  <div class="history-summary" id="history-summary" aria-live="polite">共 0 条记录</div>
+                </div>
+                <button class="btn btn-quiet btn-sm danger-quiet" type="button" id="clear-history">
+                  <svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>
+                  清空历史
+                </button>
+              </div>
+              <h2 class="sr-only">历史记录列表</h2>
+              <div id="history-content"></div>
+            </section>
+
+            <section class="page" data-page="settings" id="page-settings" hidden>
+              <h2 class="sr-only">设置选项</h2>
+              <div class="settings-page">
+                <section class="settings-card" aria-labelledby="settings-download-title">
+                  <div class="settings-head">
+                    <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg></span>
+                    <div>
+                      <h3 id="settings-download-title">下载行为</h3>
+                      <p>目录、并发、限速与命名方式</p>
+                    </div>
+                    <span class="autosave-tag"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>自动保存</span>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-label">
+                      <strong>下载目录</strong>
+                      <span>下载任务会写入此目录，并按视频标题建立子文件夹；点击路径可打开文件夹。</span>
+                    </div>
+                    <div class="path-box">
+                      <svg class="icon" aria-hidden="true"><use href="#i-folder"></use></svg>
+                      <button class="path-link" type="button" id="open-dir" title="在文件管理器中打开下载目录">
+                        <code id="path-value">C:\Users\Public\Videos\BiliPocket</code>
+                      </button>
+                      <button class="mini-btn" type="button" id="change-dir" title="更改下载目录">浏览…</button>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>同时下载数</strong>
+                      <span>控制同时进行的下载任务数量，范围 1–5。</span>
+                    </div>
+                    <div class="number-field">
+                      <input class="text-input number-input" id="concurrency-input" type="number" min="1" max="5" step="1" inputmode="numeric" aria-label="同时下载数" />
+                      <span>个</span>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>下载限速</strong>
+                      <span>单位 KB/s；0 表示不限速，对之后开始的任务生效。</span>
+                    </div>
+                    <div class="number-field">
+                      <input class="text-input number-input" id="rate-limit" type="number" min="0" max="102400" step="128" inputmode="numeric" aria-label="下载限速 KB/s" />
+                      <span>KB/s</span>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>自动重试次数</strong>
+                      <span>任务失败后重新尝试的次数，0 表示不自动重试，范围 0–10。</span>
+                    </div>
+                    <div class="number-field">
+                      <input class="text-input number-input" id="retry-max" type="number" min="0" max="10" step="1" inputmode="numeric" aria-label="自动重试次数" />
+                      <span>次</span>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>重试间隔</strong>
+                      <span>基础等待秒数，之后按 2 倍递增；范围 3–300。网络受限或触发风控时建议调大。</span>
+                    </div>
+                    <div class="number-field">
+                      <input class="text-input number-input" id="retry-base" type="number" min="3" max="300" step="1" inputmode="numeric" aria-label="重试基础间隔秒" />
+                      <span>秒</span>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>分片重试次数</strong>
+                      <span>单个分片下载失败时的重试次数，范围 0–20；与上面的任务级重试是两层策略。</span>
+                    </div>
+                    <div class="number-field">
+                      <input class="text-input number-input" id="fragment-retries" type="number" min="0" max="20" step="1" inputmode="numeric" aria-label="分片重试次数" />
+                      <span>次</span>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-wrap">
+                    <div class="setting-label">
+                      <strong>默认清晰度</strong>
+                      <span>解析完成后自动选中；不可用时回退到最接近的可用档位。</span>
+                    </div>
+                    <div class="segmented segmented-wrap" id="preferred-quality" role="radiogroup" aria-label="默认清晰度"></div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-label">
+                      <strong>文件名模板</strong>
+                      <span>变量：<code class="inline-code">{title}</code> <code class="inline-code">{up}</code> <code class="inline-code">{quality}</code> <code class="inline-code">{bvid}</code> <code class="inline-code">{date}</code> <code class="inline-code">{date:%Y%m%d}</code> <code class="inline-code">{pubdate}</code> <code class="inline-code">{p}</code> <code class="inline-code">{p_title}</code></span>
+                    </div>
+                    <input class="text-input" id="filename-template" type="text" spellcheck="false" maxlength="200" aria-label="文件名模板" />
+                    <div class="template-preview">
+                      <svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg>
+                      <span>预览</span>
+                      <code id="filename-preview">在海边等到一场落日 [1080P].mp4</code>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>封面随视频保存</strong>
+                      <span>下载完成后在视频目录写入封面文件；关闭时行为与原来一致。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-save-cover" aria-checked="false" aria-label="封面随视频保存"><span></span></button>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>封面命名</strong>
+                      <span>「-poster」适配 Jellyfin / Emby；「同名」适配部分 Kodi 版本。</span>
+                    </div>
+                    <select class="text-input" id="cover-naming" aria-label="封面命名">
+                      <option value="poster">片名-poster.jpg</option>
+                      <option value="stem">与视频同名.jpg</option>
+                    </select>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>字幕格式</strong>
+                      <span>外挂字幕文件的格式；不影响字幕是否单独下载。</span>
+                    </div>
+                    <select class="text-input" id="subtitle-format" aria-label="字幕格式">
+                      <option value="srt">SRT</option>
+                      <option value="ass">ASS</option>
+                    </select>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>写入章节标记</strong>
+                      <span>读取 B 站章节信息写入容器；开启后大文件需二次封装，会稍慢。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-write-chapters" aria-checked="false" aria-label="写入章节标记"><span></span></button>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>生成 NFO 元数据</strong>
+                      <span>供 Jellyfin / Kodi 等媒体库读取标题、简介、播出日期。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-save-nfo" aria-checked="false" aria-label="生成 NFO 元数据"><span></span></button>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>NFO 标题来源</strong>
+                      <span>分 P 视频可选「分 P 标题」或「主标题 - 分 P」。</span>
+                    </div>
+                    <select class="text-input" id="nfo-title-source" aria-label="NFO 标题来源">
+                      <option value="video">视频主标题</option>
+                      <option value="page">分 P 标题</option>
+                      <option value="combined">主标题 - 分 P</option>
+                    </select>
+                  </div>
+                </section>
+
+                <section class="settings-card" aria-labelledby="settings-account-title">
+                  <div class="settings-head">
+                    <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg></span>
+                    <div>
+                      <h3 id="settings-account-title">账号与清晰度</h3>
+                      <p>登录状态、可用档位与解析默认值</p>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline setting-row-wrap" id="auth-row" hidden>
+                    <div class="setting-label">
+                      <strong>Bilibili 账号</strong>
+                      <span id="auth-hint">未登录；登录后可访问你账号本身已有权限的清晰度与字幕</span>
+                    </div>
+                    <div class="auth-actions">
+                      <span class="auth-account" id="auth-account">未登录</span>
+                      <button class="btn btn-ghost btn-sm" type="button" id="auth-login">扫码登录</button>
+                      <button class="btn btn-quiet btn-sm" type="button" id="auth-logout" hidden>退出</button>
+                    </div>
+                    <div class="auth-panel" id="auth-panel" hidden>
+                      <img class="auth-qr" id="auth-qr" alt="哔哩哔哩登录二维码" />
+                      <div class="auth-panel-copy">
+                        <p class="auth-status" id="auth-status" role="status" aria-live="polite">请使用哔哩哔哩 App 扫码</p>
+                        <p class="auth-countdown" id="auth-countdown" aria-live="off"></p>
+                        <p class="auth-note">二维码由哔哩哔哩生成；凭据只保存在系统凭据库。仅用于你已获授权的内容。</p>
+                        <button class="btn btn-ghost btn-sm" type="button" id="auth-cancel">取消</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- dev-slot:account -->
+
+                  <div class="setting-row">
+                    <div class="setting-label">
+                      <strong>可用清晰度</strong>
+                      <span id="quality-availability-summary">未登录 · 正在读取可用档位</span>
+                    </div>
+                    <div class="quality-tiers" id="quality-availability"></div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>解析后默认勾选弹幕</strong>
+                      <span>仅预选可用类型；仍可在解析结果中调整。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-default-danmaku" aria-checked="true" aria-label="解析后默认勾选弹幕"><span></span></button>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>解析后默认勾选字幕</strong>
+                      <span>仅预选你账号可访问的字幕；仍可在解析结果中调整。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-default-subtitles" aria-checked="true" aria-label="解析后默认勾选字幕"><span></span></button>
+                  </div>
+                </section>
+
+                <section class="settings-card" aria-labelledby="settings-system-title">
+                  <div class="settings-head">
+                    <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"></use></svg></span>
+                    <div>
+                      <h3 id="settings-system-title">通知与系统</h3>
+                      <p>完成提醒、托盘与启动行为</p>
+                    </div>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>完成时发送系统通知</strong>
+                      <span>下载完成时通过系统通知提醒。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-notifications" aria-checked="true" aria-label="完成时发送系统通知"><span></span></button>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>最小化到托盘</strong>
+                      <span>点击最小化时隐藏到系统托盘，可从托盘菜单恢复窗口。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-tray" aria-checked="false" aria-label="最小化到托盘"><span></span></button>
+                  </div>
+
+                  <div class="setting-row setting-row-inline">
+                    <div class="setting-label">
+                      <strong>开机自启</strong>
+                      <span>随系统启动 BiliPocket；便携版不会写入系统启动项。</span>
+                    </div>
+                    <button class="switch" type="button" role="switch" id="toggle-autostart" aria-checked="false" aria-label="开机自启"><span></span></button>
+                  </div>
+                </section>
+
+                <section class="settings-card" aria-labelledby="settings-storage-title">
+                  <div class="settings-head">
+                    <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-database"></use></svg></span>
+                    <div>
+                      <h3 id="settings-storage-title">存储与诊断</h3>
+                      <p>所有数据仅保存在当前设备</p>
+                    </div>
+                  </div>
+
+                  <div class="setting-row">
+                    <div class="setting-label">
+                      <strong>数据目录</strong>
+                      <span>队列、历史、设置和日志保存在此目录。</span>
+                    </div>
+                    <code class="data-path" id="data-dir-value">—</code>
+                  </div>
+
+                  <div class="data-block">
+                    <p class="data-note" id="data-summary">队列 0 · 历史 0</p>
+                    <div class="engine-row" id="engine-row">
+                      <div class="engine-label">
+                        <strong>下载引擎</strong>
+                        <span id="engine-message">正在检测本地 yt-dlp 与 ffmpeg</span>
+                      </div>
+                      <div class="engine-versions">
+                        <span id="engine-ytdlp">yt-dlp —</span>
+                        <span id="engine-ffmpeg">ffmpeg —</span>
+                        <span class="engine-state" id="engine-state">检测中</span>
+                        <button class="btn btn-ghost btn-sm" type="button" id="engine-refresh" hidden>重新校验</button>
+                      </div>
+                    </div>
+                    <div class="engine-row" id="update-row" hidden>
+                      <div class="engine-label">
+                        <strong>自动更新</strong>
+                        <span id="update-message">当前构建未配置签名更新源；发布前需配置 HTTPS 端点。</span>
+                      </div>
+                      <div class="engine-versions">
+                        <span class="engine-state" id="update-state" data-tone="warning">未配置</span>
+                        <button class="btn btn-ghost btn-sm" type="button" id="check-updates" disabled>检查更新</button>
+                      </div>
+                    </div>
+                    <p class="setting-hint" id="data-storage-hint">队列、历史与设置保存在本机 SQLite 数据库；清空队列不会删除已下载的文件。</p>
+                    <p class="setting-hint" id="diagnostics-hint">诊断文件只包含版本、引擎、错误状态与脱敏日志，不会上传任何信息。</p>
+                    <div class="data-actions">
+                      <!-- dev-slot:reset -->
+                      <button class="btn btn-ghost btn-sm" type="button" id="export-diagnostics">
+                        <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+                        导出诊断
+                      </button>
+                      <button class="btn btn-quiet btn-sm" type="button" data-route="about">合规说明</button>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </section>
+
+            <section class="page" data-page="about" id="page-about" hidden>
+              <div class="about-stack">
+                <section class="about-hero">
+                  <div class="about-brand">
+                    <span class="about-mark" aria-hidden="true"><svg class="icon"><use href="#i-download"></use></svg></span>
+                    <div>
+                      <div class="about-title">
+                        <h2>BiliPocket</h2>
+                        <span class="version-pill">v0.9.0</span>
+                        <span class="proto-pill">REAL ENGINE · BETA</span>
+                      </div>
+                      <p>轻量、本地优先的哔哩哔哩下载器桌面应用。</p>
+                      <div class="about-chips">
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-monitor"></use></svg>Tauri 2 桌面壳</span>
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-bolt"></use></svg>yt-dlp + ffmpeg</span>
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-database"></use></svg>SQLite 本地队列</span>
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>系统凭据库</span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="compliance-card">
+                  <div class="compliance-top">
+                    <span class="compliance-icon">
+                      <svg class="icon" aria-hidden="true"><use href="#i-shield-check"></use></svg>
+                    </span>
+                    <div>
+                      <h2>先获得授权，再保存内容。</h2>
+                    </div>
+                  </div>
+                  <p class="compliance-lead">仅用于下载自己拥有版权或已获授权的内容，请遵守哔哩哔哩服务条款及当地法律法规。</p>
+                  <div class="compliance-grid">
+                    <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>登录只用于访问你自己账号已有权限的内容</span>
+                    <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>不绕过会员、付费内容、DRM 或平台风控</span>
+                    <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>不提供批量抓取或内容分发能力</span>
+                    <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>下载文件只写入你选择的本地目录</span>
+                  </div>
+                </section>
+
+                <div class="about-grid">
+                  <section class="about-card">
+                    <div class="about-card-head">
+                      <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg></span>
+                      <div>
+                        <h3>主要能力</h3>
+                        <p>真实解析、下载与本地管理</p>
+                      </div>
+                    </div>
+                    <ul class="about-list">
+                      <li><span>BV / av / b23 解析与按视频支持的清晰度选择</span></li>
+                      <li><span>真实 DASH 下载、暂停/继续/取消、断点续传与 ffmpeg 合并</span></li>
+                      <li><span>字幕 SRT 与按类型过滤的弹幕 XML sidecar</span></li>
+                      <li><span>SQLite 队列/历史、账号会话、主题、通知与托盘</span></li>
+                    </ul>
+                  </section>
+
+                  <section class="about-card">
+                    <div class="about-card-head">
+                      <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg></span>
+                      <div>
+                        <h3>引擎与数据边界</h3>
+                        <p>本地引擎、本地队列、系统凭据</p>
+                      </div>
+                    </div>
+                    <ul class="about-list about-list-muted">
+                      <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>解析/下载仅访问哔哩哔哩；不加载外部 CDN 或埋点</span></li>
+                      <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>队列、历史与设置保存在本机 SQLite</span></li>
+                      <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>扫码登录凭据存入 Windows 系统凭据库</span></li>
+                      <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>yt-dlp / FFmpeg 版本与许可证随安装包提供</span></li>
+                    </ul>
+                  </section>
+                </div>
+
+                <p class="about-foot">
+                  与哔哩哔哩官方无关联 · 仅用于下载自己拥有版权或已获授权的内容
+                </p>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+    <div id="modal-root"></div>
+    <div id="drawer-root"></div>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

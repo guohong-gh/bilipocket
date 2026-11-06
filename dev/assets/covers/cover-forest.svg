@@ -1,0 +1,102 @@
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="forestSky" x1="480" y1="0" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DCE8D9"/>
+      <stop offset="0.48" stop-color="#C6D6C1"/>
+      <stop offset="1" stop-color="#91A78F"/>
+    </linearGradient>
+    <radialGradient id="haze" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(672 150) scale(280 220)">
+      <stop stop-color="#FFF9DF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#FFF9DF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ridgeBack" x1="480" y1="220" x2="480" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A7BAA4"/>
+      <stop offset="1" stop-color="#8AA08A"/>
+    </linearGradient>
+    <linearGradient id="ridgeMid" x1="480" y1="260" x2="480" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6E8970"/>
+      <stop offset="1" stop-color="#506A55"/>
+    </linearGradient>
+    <linearGradient id="ridgeFront" x1="480" y1="330" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#314B3B"/>
+      <stop offset="1" stop-color="#1B2D24"/>
+    </linearGradient>
+    <linearGradient id="meadow" x1="480" y1="410" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6F8863"/>
+      <stop offset="1" stop-color="#3C533D"/>
+    </linearGradient>
+    <linearGradient id="mist" x1="480" y1="0" x2="480" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EDF3E7" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#EDF3E7" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="lightVignette" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(520 270) scale(650 440)">
+      <stop offset="0.5" stop-color="#15251B" stop-opacity="0"/>
+      <stop offset="1" stop-color="#15251B" stop-opacity="0.4"/>
+    </radialGradient>
+    <filter id="mistblur" x="-20%" y="-60%" width="140%" height="240%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="grain3" x="0" y="0" width="960" height="540">
+      <feTurbulence type="fractalNoise" baseFrequency="0.88" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.07"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="960" height="540" fill="url(#forestSky)"/>
+  <rect width="960" height="540" fill="url(#haze)"/>
+  <circle cx="676" cy="150" r="62" fill="#FFFBEB" fill-opacity="0.85"/>
+
+  <g opacity="0.45" stroke="#4E6557" stroke-width="1.7" stroke-linecap="round">
+    <path d="M128 132C138 126 148 126 156 131C148 133 136 135 128 132Z"/>
+    <path d="M170 108C178 103 186 103 194 108C186 110 178 112 170 108Z"/>
+    <path d="M226 150C234 145 244 145 252 150C244 152 234 154 226 150Z"/>
+  </g>
+
+  <path d="M0 316C82 264 156 250 246 286C326 318 380 300 460 258C548 212 636 214 736 260C820 298 892 288 960 262V400H0V316Z" fill="url(#ridgeBack)"/>
+  <path d="M0 320C100 282 176 286 252 320C338 358 410 336 500 296C596 254 690 260 778 304C850 340 910 334 960 314V420H0V320Z" fill="#C7D6C6" opacity="0.45" filter="url(#mistblur)"/>
+
+  <path d="M0 378C70 330 146 314 226 346C306 378 370 362 452 326C538 288 620 292 704 334C786 374 874 368 960 332V460H0V378Z" fill="url(#ridgeMid)"/>
+
+  <rect x="0" y="300" width="960" height="100" fill="url(#mist)" opacity="0.35" filter="url(#mistblur)"/>
+
+  <g fill="#263B2D" opacity="0.88">
+    <path d="M54 430L74 350L94 430H54Z"/><path d="M94 438L118 336L142 438H94Z"/>
+    <path d="M130 426L150 358L170 426H130Z"/><path d="M178 442L202 330L226 442H178Z"/>
+    <path d="M724 432L750 334L776 432H724Z"/><path d="M768 442L794 322L820 442H768Z"/>
+    <path d="M812 430L834 350L856 430H812Z"/><path d="M852 444L878 340L904 444H852Z"/>
+  </g>
+
+  <path d="M0 426C90 400 174 412 260 440C348 468 430 462 528 430C628 398 724 404 812 436C872 458 920 462 960 452V540H0V426Z" fill="url(#ridgeFront)"/>
+
+  <path d="M0 476C94 448 196 456 292 486C390 516 490 514 588 486C678 460 780 466 864 496C906 512 936 520 960 522V540H0V476Z" fill="url(#meadow)"/>
+
+  <g opacity="0.5" stroke="#DDE7D0" stroke-width="1.3" stroke-linecap="round">
+    <path d="M70 500C78 482 80 470 78 456"/>
+    <path d="M86 502C96 486 100 474 98 462"/>
+    <path d="M102 504C110 490 116 480 116 470"/>
+    <path d="M820 512C830 494 832 482 830 468"/>
+    <path d="M840 514C848 500 854 490 854 480"/>
+  </g>
+
+  <g transform="translate(650 372)">
+    <circle cx="8" cy="30" r="5" fill="#E8D3B9"/>
+    <path d="M2 40C10 40 20 40 24 40L27 76H0L4 40Z" fill="#C9564E"/>
+    <path d="M-6 44C-4 56 -4 68 0 74" stroke="#20251E" stroke-width="5" stroke-linecap="round"/>
+    <path d="M16 76L14 98" stroke="#1C2420" stroke-width="4" stroke-linecap="round"/>
+    <path d="M28 76L32 98" stroke="#1C2420" stroke-width="4" stroke-linecap="round"/>
+    <path d="M28 44C40 52 42 62 38 72" stroke="#9E403E" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1 42C-14 46 -18 58 -12 68" stroke="#B64C46" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <g>
+    <text x="56" y="76" fill="#334A3C" fill-opacity="0.7" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="4">WILDERNESS / DAY 03</text>
+    <text x="52" y="424" fill="#1D3327" font-family="'Microsoft YaHei UI','PingFang SC',sans-serif" font-size="58" font-weight="700" letter-spacing="3">山野来信</text>
+    <text x="56" y="462" fill="#3D5345" fill-opacity="0.8" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="5">A WEEKEND OFF-GRID · 15:08</text>
+  </g>
+
+  <rect width="960" height="540" fill="url(#lightVignette)"/>
+  <rect width="960" height="540" filter="url(#grain3)" opacity="0.85"/>
+</svg>

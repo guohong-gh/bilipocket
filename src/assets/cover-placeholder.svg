@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180" role="img" aria-label="封面占位图">
+  <rect width="320" height="180" fill="#f3f4f6" />
+  <rect x="0.5" y="0.5" width="319" height="179" fill="none" stroke="#e5e7eb" />
+  <g fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 62v34" />
+    <path d="m148 84 12 12 12-12" />
+    <path d="M137 112h46" />
+  </g>
+</svg>

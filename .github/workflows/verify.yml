@@ -1,0 +1,68 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: npm ci
+      - name: Verify JavaScript syntax
+        run: |
+          Get-ChildItem src/js/*.js, src/js/app/*.js | ForEach-Object { node --check $_.FullName }
+          Get-ChildItem scripts/*.mjs | ForEach-Object { node --check $_.FullName }
+      - name: Type-check frontend
+        run: npm run typecheck
+      - name: Browser UI regression
+        run: npm run test:ui
+      - name: Build desktop E2E fixtures
+        working-directory: src-tauri
+        run: |
+          cargo build
+          cargo build --example fake_ytdlp
+      - name: Desktop E2E
+        run: npm run test:desktop
+      - name: Desktop extras E2E
+        run: npm run test:desktop:extras
+      - name: Desktop auto-retry E2E
+        run: npm run test:desktop:retry
+      - name: Desktop priority E2E
+        run: npm run test:desktop:priority
+      - name: Desktop update check E2E
+        run: npm run test:desktop:update
+      - name: Desktop crash recovery E2E
+        run: npm run test:desktop:recovery
+      - name: Rust format
+        working-directory: src-tauri
+        run: cargo fmt --all -- --check
+      - name: Rust tests
+        working-directory: src-tauri
+        run: cargo test --lib
+      - name: Rust lint
+        working-directory: src-tauri
+        run: cargo clippy --all-targets
+      - name: Verify pinned sidecars
+        run: node scripts/verify-sidecars.mjs
+      - name: Build release
+        run: npm run build
+      - name: Package portable build
+        run: npm run package:portable
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bilipocket-windows
+          path: |
+            src-tauri/target/release/bilipocket.exe
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/portable/*.zip
+          if-no-files-found: error

@@ -1,0 +1,116 @@
+<svg width="960" height="540" viewBox="0 0 960 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="outside" x1="480" y1="0" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D2029"/>
+      <stop offset="0.55" stop-color="#17333C"/>
+      <stop offset="1" stop-color="#09161C"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(736 304) scale(380 300)">
+      <stop stop-color="#F0B46C" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#F0B46C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sill" x1="480" y1="440" x2="480" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#241A14"/>
+      <stop offset="1" stop-color="#0B0908"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="960" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A151A"/>
+      <stop offset="0.5" stop-color="#122329"/>
+      <stop offset="1" stop-color="#0A151A"/>
+    </linearGradient>
+    <linearGradient id="textShade" x1="0" y1="300" x2="600" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081116" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#081116" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="rainGlass" width="64" height="110" patternUnits="userSpaceOnUse" patternTransform="rotate(6)">
+      <line x1="18" y1="-8" x2="18" y2="42" stroke="#BFE3EA" stroke-opacity="0.18" stroke-width="1.4"/>
+      <line x1="44" y1="48" x2="44" y2="88" stroke="#BFE3EA" stroke-opacity="0.1" stroke-width="1"/>
+    </pattern>
+    <filter id="bokeh" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+    <filter id="steam" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="grain4" x="0" y="0" width="960" height="540">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.08"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="960" height="540" fill="url(#outside)"/>
+  <rect width="960" height="540" fill="url(#warm)"/>
+
+  <g filter="url(#bokeh)" opacity="0.8">
+    <circle cx="180" cy="170" r="26" fill="#FFD495" opacity="0.6"/>
+    <circle cx="252" cy="238" r="16" fill="#FFC37A" opacity="0.45"/>
+    <circle cx="436" cy="152" r="20" fill="#8FE4EA" opacity="0.25"/>
+    <circle cx="522" cy="238" r="30" fill="#FFB765" opacity="0.35"/>
+    <circle cx="660" cy="136" r="14" fill="#FFD495" opacity="0.4"/>
+    <circle cx="812" cy="226" r="22" fill="#FFBB6E" opacity="0.45"/>
+    <circle cx="368" cy="320" r="12" fill="#FFC37A" opacity="0.25"/>
+  </g>
+
+  <g opacity="0.5" fill="#142D35">
+    <rect x="0" y="318" width="164" height="150"/>
+    <rect x="172" y="280" width="108" height="188"/>
+    <rect x="292" y="342" width="98" height="126"/>
+    <rect x="560" y="300" width="128" height="168"/>
+    <rect x="700" y="334" width="94" height="134"/>
+    <rect x="806" y="288" width="154" height="180"/>
+  </g>
+
+  <g filter="url(#bokeh)">
+    <rect x="150" y="120" width="290" height="60" rx="30" fill="#F4C07D" opacity="0.16"/>
+    <rect x="600" y="90" width="250" height="44" rx="22" fill="#9FE7EA" opacity="0.12"/>
+  </g>
+
+  <g>
+    <rect x="704" y="84" width="152" height="56" rx="14" fill="#101D22" stroke="#F5C77E" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="780" y="122" fill="#FFDCA0" font-family="Consolas, 'Courier New', monospace" font-size="28" font-weight="700" text-anchor="middle" letter-spacing="4">24H</text>
+    <text x="780" y="160" fill="#F5C77E" fill-opacity="0.55" font-family="'Microsoft YaHei UI','PingFang SC',sans-serif" font-size="12" text-anchor="middle" letter-spacing="4">LIGHT &amp; COFFEE</text>
+  </g>
+
+  <rect width="960" height="540" fill="url(#rainGlass)" opacity="0.9"/>
+  <g stroke="#C9E8EC" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round" opacity="0.8">
+    <path d="M120 96C118 128 124 156 120 188"/>
+    <path d="M268 196C264 226 268 252 266 282"/>
+    <path d="M514 86C512 118 516 144 512 176"/>
+    <path d="M872 176C868 204 872 234 870 262"/>
+    <path d="M390 394C388 418 392 440 390 462"/>
+    <path d="M620 360C618 386 622 408 620 430"/>
+  </g>
+
+  <rect y="434" width="960" height="106" fill="url(#sill)"/>
+  <path d="M0 434H960" stroke="#E4AE70" stroke-opacity="0.2" stroke-width="1.5"/>
+  <g opacity="0.16" fill="#F4D8AE">
+    <rect x="0" y="454" width="960" height="2"/>
+    <rect x="0" y="492" width="960" height="1.5"/>
+  </g>
+
+  <g transform="translate(724 382)">
+    <ellipse cx="56" cy="86" rx="66" ry="10" fill="#000000" opacity="0.3"/>
+    <path d="M18 22H100L92 78C90 88 82 92 72 92H46C36 92 28 88 26 78L18 22Z" fill="#F4E3C8"/>
+    <path d="M18 22H100" stroke="#FFF3DE" stroke-width="4" stroke-linecap="round"/>
+    <path d="M100 36C122 34 128 50 120 60C114 68 104 68 96 64" stroke="#F4E3C8" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="59" cy="24" rx="42" ry="8" fill="#50331E" opacity="0.9"/>
+    <g filter="url(#steam)" opacity="0.35" stroke="#FFE9C9" stroke-width="4" stroke-linecap="round">
+      <path d="M48 4C40 -8 52 -16 46 -30"/>
+      <path d="M66 2C60 -10 72 -18 66 -34"/>
+      <path d="M84 6C78 -6 88 -14 84 -26"/>
+    </g>
+  </g>
+
+  <rect width="960" height="540" fill="url(#textShade)"/>
+
+  <g>
+    <text x="56" y="76" fill="#BDD8DB" fill-opacity="0.7" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="4">RAIN DIARY / 04</text>
+    <text x="52" y="424" fill="#FBF0DD" font-family="'Microsoft YaHei UI','PingFang SC',sans-serif" font-size="58" font-weight="700" letter-spacing="3">雨天的便利店</text>
+    <text x="56" y="462" fill="#B9CBC7" fill-opacity="0.7" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="5">A WARM PLACE TO WAIT · 06:20</text>
+  </g>
+
+  <rect width="960" height="540" filter="url(#grain4)" opacity="0.9"/>
+</svg>

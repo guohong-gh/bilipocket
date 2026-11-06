@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": []
+  },
+  "include": [
+    "src/js/types.d.ts",
+    "src/js/bridge.js",
+    "src/js/tauri.js",
+    "src/js/catalog.js",
+    "src/js/settings-schema.js",
+    "src/js/theme-boot.js",
+    "src/js/runtime.js",
+    "src/js/store-desktop.js",
+    "src/js/queue-model.js",
+    "src/js/ui.js",
+    "src/js/app.js",
+    "src/js/app/dom.js",
+    "src/js/app/parse-store.js",
+    "src/js/app/format.js",
+    "src/js/app/season-panel.js",
+    "src/js/app/advanced-options.js",
+    "src/js/app/router.js",
+    "src/js/app/chrome.js",
+    "src/js/app/shell.js",
+    "src/js/app/platform.js",
+    "src/js/app/selection.js",
+    "src/js/app/action-bar.js",
+    "src/js/app/download-parse.js",
+    "src/js/app/enqueue.js",
+    "src/js/app/quality-picker.js",
+    "src/js/app/result-view.js",
+    "src/js/app/history-view.js",
+    "src/js/app/home-view.js",
+    "src/js/app/queue-view.js",
+    "src/js/app/auth.js",
+    "src/js/app/settings-view.js",
+    "src/js/app/theme.js"
+  ]
+}
