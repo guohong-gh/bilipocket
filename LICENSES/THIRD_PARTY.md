@@ -26,6 +26,8 @@ They are bundled unmodified next to the application executable.
 
 BiliPocket uses crates from crates.io (Tauri, rusqlite, reqwest, tokio, keyring, qrcode, serde, uuid, md-5, sha2 and others). Their license metadata is available through `cargo metadata` and the respective crates. Generate a complete dependency license bundle before a public release.
 
+> **[待确认 T9]** 公开发布前需导出完整的 Rust crates 依赖许可清单；当前段落仅为占位说明。本轮不安装 cargo-about 等新工具，见 README「待确认事项」表。
+
 ## Bilibili
 
 BiliPocket is not affiliated with Bilibili. Use it only for content you own or are authorized to download, and comply with Bilibili's terms and local law. The app does not include DRM circumvention, paid-content bypass, or anti-bot evasion.

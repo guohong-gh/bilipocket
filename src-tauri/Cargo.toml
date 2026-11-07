@@ -1,7 +1,8 @@
 [package]
 name = "bilipocket"
 version = "0.9.0"
-description = "BiliPocket — lightweight Bilibili downloader desktop prototype"
+description = "BiliPocket — lightweight Bilibili downloader desktop app (Windows, Tauri 2)"
+# [待确认 T2] 作者 / 版权持有人身份待确认；见 README「待确认事项」表。
 authors = ["BiliPocket"]
 edition = "2021"
 

@@ -6,6 +6,8 @@ BiliPocket is a local-first Windows downloader for content you own or are author
 
 Open a private security advisory or contact the maintainer directly. Do not include cookies, account IDs, full request URLs, or download paths in a public issue. Redact logs before sharing them; the in-app diagnostics export already removes these fields.
 
+> **[待确认 T3]** 公开前需补充安全联系邮箱，或启用 GitHub 私有安全公告（private vulnerability reporting）。当前仅写「contact the maintainer directly」，没有可执行的联系方式；见 README「待确认事项」表。
+
 ## Credential handling
 
 - Bilibili sessions are stored in Windows Credential Manager through the `keyring` crate; the portable build uses a DPAPI-encrypted `session.dpapi` inside `app-data/`. Startup refresh validates them against `nav` and clears expired credentials.

@@ -32,16 +32,21 @@ jobs:
           cargo build
           cargo build --example fake_ytdlp
       - name: Desktop E2E
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run test:desktop
       - name: Desktop extras E2E
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run test:desktop:extras
       - name: Desktop auto-retry E2E
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run test:desktop:retry
       - name: Desktop priority E2E
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run test:desktop:priority
       - name: Desktop update check E2E
         run: npm run test:desktop:update
       - name: Desktop crash recovery E2E
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run test:desktop:recovery
       - name: Rust format
         working-directory: src-tauri
@@ -53,12 +58,16 @@ jobs:
         working-directory: src-tauri
         run: cargo clippy --all-targets
       - name: Verify pinned sidecars
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: node scripts/verify-sidecars.mjs
       - name: Build release
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run build
       - name: Package portable build
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         run: npm run package:portable
       - uses: actions/upload-artifact@v4
+        if: hashFiles('src-tauri/binaries/*.exe') != ''
         with:
           name: bilipocket-windows
           path: |

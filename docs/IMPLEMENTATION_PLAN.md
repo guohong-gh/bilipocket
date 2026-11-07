@@ -1,5 +1,7 @@
 # BiliPocket 完整实现计划（v1.0.0）
 
+> **[历史归档 / 内部工作稿]** 本文档为早期规划记录，反映撰写时状态，不代表当前仓库现状；文中的模块路径、配置名与版本号仅供追溯。当前状态以 `README.md`、`RELEASE.md` 与 `src-tauri/tauri.conf.json` 为准。
+
 > 把当前 v0.7.0 高保真原型升级为可真实解析、下载、登录、持久化、自动更新的 Windows 桌面应用。
 >
 > 已确认的方向：**yt-dlp + ffmpeg sidecar**、**扫码登录 + 加密会话**、**Windows 优先**、**前端保持原生 ESM / 零构建**。
@@ -202,8 +204,8 @@ queued → probing → downloading → muxing → extras → completed
 ### 6.1 Sidecar 打包
 
 - `src-tauri/binaries/yt-dlp-x86_64-pc-windows-msvc.exe`、`ffmpeg-x86_64-pc-windows-msvc.exe`（Tauri 目标三元组命名）。
-- `tauri.conf.json` 的 `bundle.externalBin` 注册；`tauri-plugin-shell` 只在 Rust 侧使用，JS 不获得 shell 权限。
-- 每个版本固定 sidecar 版本与 SHA-256；`engine_manifest.json` 记录版本、哈希、来源。
+- `tauri.conf.json` 的 `bundle.resources` 注册；`tauri-plugin-shell` 只在 Rust 侧使用，JS 不获得 shell 权限。
+- 每个版本固定 sidecar 版本与 SHA-256；`ENGINE_MANIFEST.json` 记录版本、哈希、来源。
 - 应用启动时校验哈希；缺失/损坏时显示“下载引擎不可用”，不自动从任意 URL 下载。
 - 升级策略：引擎随应用版本发布；另提供“检查引擎更新”的签名清单；不在运行时静默拉取未验证二进制。
 
@@ -265,7 +267,7 @@ queued → probing → downloading → muxing → extras → completed
 
 - 新增 `src/js/bridge.js`：封装 `invoke`/事件订阅，使用 JSDoc typedef 定义 IPC 负载，做运行时字段校验；浏览器预览用 mock bridge 保持可开发。
 - `store.js` 从“唯一状态源”改为 Rust 状态的投影缓存；删除 800ms 模拟 ticker、随机速度、1500ms 假解析和种子任务。
-- `mock-data.js` 只保留为开发/演示 fixture，生产构建不参与解析。
+- `dev/mock-store.js` 等演示 fixture 只保留在 `dev/`，生产构建不参与解析。
 - `app.js` 保留现有渲染与路由；事件处理器调用 bridge，按真实错误码展示操作。
 - 新增 `jsconfig.json` + `// @ts-check`，用 TypeScript 的 `tsc --noEmit` 做类型检查（不打包、不改运行时）。
 - CSP 尽量收紧；如果加载本地缓存封面，只加入受控 asset 协议，不放开任意外部图片。
@@ -416,7 +418,7 @@ queued → probing → downloading → muxing → extras → completed
 - **真实内容下载**：未下载任何真实视频；合并、音频转码、真实字幕/弹幕 sidecar 仍只有假引擎覆盖。
 - **Windows Authenticode**：没有生产代码签名证书；自签名流程已验证主程序 exe、重建后的安装包、带 app-version 的 updater 签名以及 `verify:release` 的证书校验分支，生产证书仍需配置并做最终信任验证。
 - **生产更新**：更新端点、签名私钥和 `latest.json` 托管未配置；当前构建通过空 `update-source.txt` 保持禁用；实际下载安装更新未执行。
-- **托管 CI**：当前目录不是 Git 仓库，`.github/workflows/verify.yml` 与 `release.yml` 未在真实仓库运行。
+- **托管 CI**：撰写时尚未初始化 Git 仓库，`.github/workflows/verify.yml` 与 `release.yml` 未在真实托管仓库运行。
 
 ### 状态
 

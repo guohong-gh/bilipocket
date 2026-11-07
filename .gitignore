@@ -16,7 +16,7 @@ test-results/
 playwright-report/
 coverage/
 
-# ---------- 随包分发的 sidecar（约 104MB，由构建脚本获取，不入库）----------
+# ---------- 随包分发的 sidecar（约 104MB，需人工放置，不入库）----------
 src-tauri/binaries/*.exe
 
 # ---------- 本地生成 / 内部文件 ----------
@@ -32,3 +32,23 @@ src-tauri/tauri.build.conf.json
 .DS_Store
 Thumbs.db
 *.sw?
+
+# ---------- 敏感信息与本地配置 ----------
+.env*
+!.env.example
+*.local.*
+*.pfx
+*.p12
+*.pem
+*.key
+*.sig
+*.db
+*.sqlite
+*.sqlite3
+cookies.txt
+cookies.json
+
+# ---------- 工具与生成物 ----------
+.tauri/
+src-tauri/gen/
+/latest.json

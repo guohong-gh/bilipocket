@@ -44,7 +44,7 @@ BiliPocket 是一个本地优先的哔哩哔哩视频下载器桌面应用。它
 
 ## Evidence on Hand
 
-- mock 模式保留四条虚构视频、四张本地 SVG 封面与种子数据，位于 `src/js/mock-data.js` 与 `src/assets/covers/`；真实模式使用网络解析和 SQLite。
+- mock 模式保留四条虚构视频、四张本地 SVG 封面与种子数据，位于 `dev/mock-store.js`、`dev/demo-data.js` 与 `dev/assets/covers/*.svg`；真实模式使用网络解析和 SQLite。
 - 无真实用户评价、客户案例、价格、下载速度、容量或平台指标；未来工作不得编造这些事实。
 - 真实桌面能力来自 `src-tauri/src/lib.rs` 与 Tauri 配置；前端视觉验证可对照 README 中的交互说明。
 

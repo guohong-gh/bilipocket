@@ -1,7 +1,9 @@
 # B站下载器 Issue 需求清洗 · 能力缺口 · 可执行任务路线图
 
+> **[历史归档 / 内部工作稿]** 本文档为 v0.9.0 开发期的内部分析记录，反映撰写时状态，不代表当前仓库现状；仅供追溯。当前状态以 `README.md`、`RELEASE.md` 与 `src-tauri/tauri.conf.json` 为准。
+
 > 分析对象：《B站下载器Issue需求整理.xlsx》（147 条 open issue，5 个同类开源项目）
-> 对比对象：BiliPocket（本项目仓库 `F:\vibeCoding\bilidownload`，v0.9.0 真实引擎 Beta）
+> 对比对象：BiliPocket（本项目仓库，v0.9.0 真实引擎 Beta）
 > 产出日期：2026-11-03
 > 用途：直接作为开发排期与 Issue 拆分依据
 

@@ -27,7 +27,8 @@
     "test:desktop:auth": "node scripts/e2e-auth-qr.mjs",
     "test:desktop:priority": "node scripts/e2e-priority.mjs",
     "test:desktop:session-expiry": "node scripts/e2e-session-expiry.mjs",
-    "verify:release": "node scripts/verify-release.mjs"
+    "verify:release": "node scripts/verify-release.mjs",
+    "verify:sidecars": "node scripts/verify-sidecars.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

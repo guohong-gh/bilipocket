@@ -147,10 +147,9 @@ async function main() {
     const countdownNext = await evaluate("document.querySelector('#auth-countdown')?.textContent || ''");
     if (!countdownNext || countdownNext === qr.countdown) fail("QR countdown did not advance");
     const shot = await send("Page.captureScreenshot", { format: "png" });
-    await writeFile(
-      join(root, ".impeccable", "review", "v090", "auth-qr.png"),
-      Buffer.from(shot.data, "base64"),
-    );
+    const shotDir = join(root, "test-results");
+    await mkdir(shotDir, { recursive: true });
+    await writeFile(join(shotDir, "auth-qr.png"), Buffer.from(shot.data, "base64"));
     stage("QR rendered with countdown; cancelling");
     await evaluate("document.querySelector('#auth-cancel')?.click()");
     await waitFor("document.querySelector('#auth-panel')?.hidden === true", 10_000, "auth panel closed");
