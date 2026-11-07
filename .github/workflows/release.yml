@@ -13,9 +13,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          # [待确认 T11] lfs: true 与 .gitattributes（无 filter=lfs）不匹配，当前为空操作；保留不动，待 sidecar 托管形态确定后再决定启用 LFS 或移除。
-          lfs: true
       - uses: actions/setup-node@v4
         with:
           node-version: 22

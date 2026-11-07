@@ -12,6 +12,8 @@ npm run dev         # 桌面应用（验证窗口、通知、托盘、真实下�
 
 需要 Node.js 18+、Rust stable（Windows 用 MSVC toolchain）。打包还需要 MSVC Build Tools 与 WebView2 Runtime。
 
+**打包与桌面 E2E 的前置条件**：`npm run build`、`package:portable`、`test:desktop*`、`verify:sidecars`、`verify:release` 都依赖 `src-tauri/binaries/` 下两个不入库的 sidecar exe。首次克隆需按 `src-tauri/binaries/ENGINE_MANIFEST.json` 自行放置，并用 `npm run verify:sidecars` 校验 SHA-256；未放置时这些命令会失败，CI 上对应步骤会自动跳过。清单只有来源首页与哈希，没有下载直链。详见 README「打包」与「待确认事项」T4。
+
 ## 提交前必须通过
 
 ```bash
