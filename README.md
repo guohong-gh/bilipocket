@@ -92,7 +92,7 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 ### 从源码运行
 
 ```bash
-git clone https://github.com/GoodDeedsLikeWater/bilipocket.git bilipocket
+git clone https://github.com/guohong-gh/bilipocket.git bilipocket
 cd bilipocket
 npm install
 
