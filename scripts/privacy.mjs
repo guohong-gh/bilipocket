@@ -132,8 +132,15 @@ export function scanBufferForPrivateData(buffer, markers) {
   const findings = new Set();
   for (const { label, value } of markers) {
     for (const encoding of ["utf8", "utf16le"]) {
-      if (buffer.indexOf(Buffer.from(value, encoding)) !== -1) {
-        findings.add(label);
+      const needle = Buffer.from(value, encoding);
+      const index = buffer.indexOf(needle);
+      if (index !== -1) {
+        const start = Math.max(0, index - 48);
+        const context = buffer
+          .subarray(start, index + needle.length + 48)
+          .toString(encoding)
+          .replace(/[^\x20-\x7e]/g, "·");
+        findings.add(`${label} (@${index} ${encoding}: …${context}…)`);
       }
     }
   }
