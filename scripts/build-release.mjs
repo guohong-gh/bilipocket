@@ -10,7 +10,15 @@ const releaseConfig = JSON.parse(
   await readFile(join(root, "src-tauri", "tauri.release.conf.json"), "utf8"),
 );
 const thumbprint = process.env.WINDOWS_CERTIFICATE_THUMBPRINT?.trim();
+const updaterKey = process.env.TAURI_SIGNING_PRIVATE_KEY?.trim() || null;
 const config = structuredClone(releaseConfig);
+
+if (!updaterKey) {
+  config.bundle = { ...(config.bundle || {}), createUpdaterArtifacts: false };
+  console.log(
+    "[release] TAURI_SIGNING_PRIVATE_KEY is not set; building an unsigned release without updater artifacts.",
+  );
+}
 
 if (thumbprint) {
   const signScript = join(root, "scripts", "sign-windows.ps1");
@@ -160,23 +168,26 @@ async function patchNsisUninstallerDefault(scriptPath) {
 await stat(installerPath);
 const signaturePath = `${installerPath}.sig`;
 await rm(signaturePath, { force: true });
-console.log("[release] signing updater manifest with app version");
-const keyValue = process.env.TAURI_SIGNING_PRIVATE_KEY;
-const keyPath =
-  process.env.TAURI_SIGNING_PRIVATE_KEY_PATH ||
-  (keyValue && existsSync(keyValue) ? keyValue : null);
-const signerEnv = { ...process.env };
-if (keyPath) {
-  signerEnv.TAURI_SIGNING_PRIVATE_KEY_PATH = keyPath;
-  delete signerEnv.TAURI_SIGNING_PRIVATE_KEY;
+if (updaterKey) {
+  console.log("[release] signing updater manifest with app version");
+  const keyPath =
+    process.env.TAURI_SIGNING_PRIVATE_KEY_PATH ||
+    (existsSync(updaterKey) ? updaterKey : null);
+  const signerEnv = { ...process.env };
+  if (keyPath) {
+    signerEnv.TAURI_SIGNING_PRIVATE_KEY_PATH = keyPath;
+    delete signerEnv.TAURI_SIGNING_PRIVATE_KEY;
+  }
+  run(process.execPath, [
+    join(root, "node_modules", "@tauri-apps", "cli", "tauri.js"),
+    "signer",
+    "sign",
+    "--app-version",
+    packageJson.version,
+    installerPath,
+  ], { env: signerEnv });
+  await stat(signaturePath);
+} else {
+  console.log("[release] no signing key; skipped updater signature so the installer ships unsigned");
 }
-run(process.execPath, [
-  join(root, "node_modules", "@tauri-apps", "cli", "tauri.js"),
-  "signer",
-  "sign",
-  "--app-version",
-  packageJson.version,
-  installerPath,
-], { env: signerEnv });
-await stat(signaturePath);
 await rm(join(root, "src-tauri", "tauri.build.conf.json"), { force: true });

@@ -42,6 +42,7 @@ const installer = join(
   `BiliPocket_${version}_x64-setup.exe`,
 );
 const signature = `${installer}.sig`;
+const allowUnsigned = process.env.BILIPOCKET_ALLOW_UNSIGNED === "1";
 const portable = join(
   root,
   "src-tauri",
@@ -52,7 +53,11 @@ const portable = join(
   `BiliPocket_${version}_x64_portable.zip`,
 );
 check(existsSync(installer), `missing installer: ${installer}`);
-check(existsSync(signature), `missing updater signature: ${signature}`);
+if (allowUnsigned) {
+  if (!existsSync(signature)) warnings.push("updater signature is absent: unsigned release build");
+} else {
+  check(existsSync(signature), `missing updater signature: ${signature}`);
+}
 check(existsSync(portable), `missing portable zip: ${portable}`);
 const portableFolder = portable.replace(/\.zip$/, "");
 check(existsSync(join(portableFolder, "BiliPocket.portable")), "portable marker is missing");

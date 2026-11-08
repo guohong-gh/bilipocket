@@ -260,7 +260,7 @@ cd src-tauri && cargo test --lib && cargo clippy --lib --tests
 
 | 编号 | 事项 | 当前值 / 位置 | 未确认的后果 |
 |---|---|---|---|
-| T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` | `.github/workflows/release.yml` | 签名发布不可用 |
+| T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` 均未配置 | `.github/workflows/release.yml`：缺私钥时自动降级为未签名发布，跳过 `.sig`、`latest.json` 与 `verify:release` 的签名项 | 签名发布不可用；流水线仍能产出未签名包 |
 | T6 | updater 私钥：`tauri.conf.json` 里已配置公钥，但配套私钥在本机与 CI secrets 中都不存在 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | v0.9.0 未产出 `.sig` 与 `latest.json`，`verify:release` 报 `missing updater signature`；自动更新（更新源本就为空）保持禁用 |
 | T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建需提供完整对应源码或书面要约 | `LICENSES/FFMPEG_SOURCE_OFFER.md`（对应源码地址、完整 `configure` 参数、三年书面要约） | v0.9.0 已随包分发该构建，文档义务已补齐；要彻底消除风险需换 LGPL 构建，代价是重做 sidecar 哈希并重新发布 |
 | T9 | Rust crates 完整依赖许可清单 | `LICENSES/THIRD_PARTY.md` | 第三方许可不完整 |
