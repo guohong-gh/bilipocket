@@ -107,7 +107,11 @@ function findGenericProfilePath(buffer, findings) {
           .subarray(index + needle.length, index + needle.length + width)
           .toString(encoding);
         if (!PUBLIC_SEGMENT.test(following)) {
-          findings.add("another Windows user-profile path");
+          const context = buffer
+            .subarray(index, index + 48)
+            .toString(encoding)
+            .replace(/[^\x20-\x7e]/g, "·");
+          findings.add(`another Windows user-profile path (@${index} ${encoding}: ${context})`);
           return;
         }
         index = buffer.indexOf(needle, index + needle.length);
