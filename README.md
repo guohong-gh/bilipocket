@@ -91,7 +91,7 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 | [`BiliPocket_0.9.0_x64-setup.exe`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64-setup.exe) | NSIS 安装包，已内置 yt-dlp 与 ffmpeg，双击安装即可 |
 | [`BiliPocket_0.9.0_x64_portable.zip`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64_portable.zip) | 便携版，解压即用，数据全部留在解压目录的 `app-data/` 下 |
 
-> 安装包**未做 Authenticode 签名**，首次运行可能触发 SmartScreen 提示；**自动更新暂不可用**（更新源未配置），升级需要下载新版本手动覆盖。
+> 首次运行若出现 SmartScreen 提示，点「更多信息 → 仍要运行」即可。本版不带自动更新，升级时下载新版本覆盖安装。
 > 也可以按下面「从源码运行」和「打包」两节自行构建，产物路径同上，文件名固定为 `BiliPocket_<版本>_x64-setup.exe`。
 
 ### 环境要求
