@@ -18,6 +18,10 @@ jobs:
     runs-on: windows-latest
     env:
       RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
+      # 让 cargo/rustup 不落在 C:\Users\<runner> 下：这样依赖源码路径里不会出现账号名，
+      # 也避免 CMake 生成混合分隔符（C:/Users\<runner>\.cargo\...）导致 remap 只匹配到前缀。
+      CARGO_HOME: C:\cargo
+      RUSTUP_HOME: C:\rustup
     steps:
       - uses: actions/checkout@v4
       # 不覆盖 checkout 的 ref：tag 触发的运行构建该 tag；workflow_dispatch 触发时构建被派发的分支，
