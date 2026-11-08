@@ -252,7 +252,7 @@ cd src-tauri && cargo test --lib && cargo clippy --lib --tests
 
 ## 许可证
 
-源代码采用 [MIT](LICENSE)。随包分发的 yt-dlp（The Unlicense）与 FFmpeg（GPL-3.0）保留各自许可，详见 [`LICENSES/THIRD_PARTY.md`](LICENSES/THIRD_PARTY.md)。
+源代码采用 [MIT](LICENSE)。随包分发的 yt-dlp（The Unlicense）与 FFmpeg（GPL-3.0）保留各自许可，详见 [`LICENSES/THIRD_PARTY.md`](LICENSES/THIRD_PARTY.md)；FFmpeg 的对应源码与书面要约见 [`LICENSES/FFMPEG_SOURCE_OFFER.md`](LICENSES/FFMPEG_SOURCE_OFFER.md)。
 
 ## 待确认事项（首次公开前）
 
@@ -262,7 +262,7 @@ cd src-tauri && cargo test --lib && cargo clippy --lib --tests
 |---|---|---|---|
 | T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` | `.github/workflows/release.yml` | 签名发布不可用 |
 | T6 | updater 私钥：`tauri.conf.json` 里已配置公钥，但配套私钥在本机与 CI secrets 中都不存在 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | v0.9.0 未产出 `.sig` 与 `latest.json`，`verify:release` 报 `missing updater signature`；自动更新（更新源本就为空）保持禁用 |
-| T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建需提供完整对应源码或书面要约；或改用 LGPL 构建 | `RELEASE.md` §1、`LICENSES/THIRD_PARTY.md` | 不阻塞推送源码；**发布 Release 前必须落实** |
+| T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建需提供完整对应源码或书面要约 | `LICENSES/FFMPEG_SOURCE_OFFER.md`（对应源码地址、完整 `configure` 参数、三年书面要约） | v0.9.0 已随包分发该构建，文档义务已补齐；要彻底消除风险需换 LGPL 构建，代价是重做 sidecar 哈希并重新发布 |
 | T9 | Rust crates 完整依赖许可清单 | `LICENSES/THIRD_PARTY.md` | 第三方许可不完整 |
 
 ---
