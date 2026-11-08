@@ -139,7 +139,10 @@ impl Settings {
         if !matches!(self.subtitle_format.as_str(), "srt" | "ass") {
             self.subtitle_format = default_subtitle_format();
         }
-        if !matches!(self.nfo_title_source.as_str(), "video" | "page" | "combined") {
+        if !matches!(
+            self.nfo_title_source.as_str(),
+            "video" | "page" | "combined"
+        ) {
             self.nfo_title_source = default_nfo_title_source();
         }
     }
@@ -206,9 +209,9 @@ impl TaskOptions {
 fn is_valid_audio_track_id(value: &str) -> bool {
     !value.is_empty()
         && value.chars().count() <= MAX_AUDIO_TRACK_ID_CHARS
-        && value
-            .chars()
-            .all(|character| character.is_ascii_alphanumeric() || character == '_' || character == '-')
+        && value.chars().all(|character| {
+            character.is_ascii_alphanumeric() || character == '_' || character == '-'
+        })
 }
 
 /// 一个 BV 下的分 P（来自 view 接口的 `pages`，不是遍历抓取）。

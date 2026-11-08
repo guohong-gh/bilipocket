@@ -206,11 +206,7 @@ impl Queue {
         if let Some(job) = self.jobs.lock_or_recover("jobs").remove(id) {
             job.terminate();
         }
-        if let Some(mut running) = self
-            .running
-            .lock_or_recover("running")
-            .remove(id)
-        {
+        if let Some(mut running) = self.running.lock_or_recover("running").remove(id) {
             let _ = running.cancel.send(true);
             if let Some(handle) = running.handle.take() {
                 handle.abort();
@@ -223,10 +219,7 @@ impl Queue {
         if let Some(job) = self.jobs.lock_or_recover("jobs").remove(id) {
             job.terminate();
         }
-        let running = self
-            .running
-            .lock_or_recover("running")
-            .remove(id);
+        let running = self.running.lock_or_recover("running").remove(id);
         if let Some(mut running) = running {
             let _ = running.cancel.send(true);
             if let Some(mut handle) = running.handle.take() {
@@ -286,12 +279,7 @@ impl Queue {
                     .lock_or_recover("settings")
                     .max_concurrent
                     .max(1) as usize;
-                if self
-                    .running
-                    .lock_or_recover("running")
-                    .len()
-                    >= max_concurrent
-                {
+                if self.running.lock_or_recover("running").len() >= max_concurrent {
                     break;
                 }
 
@@ -347,16 +335,14 @@ impl Queue {
 
         let token = self.next_token.fetch_add(1, Ordering::Relaxed);
         let (cancel, cancel_rx) = watch::channel(false);
-        self.running
-            .lock_or_recover("running")
-            .insert(
-                task.id.clone(),
-                RunningTask {
-                    token,
-                    cancel,
-                    handle: None,
-                },
-            );
+        self.running.lock_or_recover("running").insert(
+            task.id.clone(),
+            RunningTask {
+                token,
+                cancel,
+                handle: None,
+            },
+        );
 
         task.status = TaskStatus::Probing;
         task.error_code = None;
@@ -431,9 +417,7 @@ impl Queue {
     }
 
     fn fragment_retries(&self) -> u32 {
-        self.settings
-            .lock_or_recover("settings")
-            .fragment_retries
+        self.settings.lock_or_recover("settings").fragment_retries
     }
 
     fn subtitle_format(&self) -> String {
@@ -637,10 +621,7 @@ impl Queue {
             }
         }
 
-        let settings = self
-            .settings
-            .lock_or_recover("settings")
-            .clone();
+        let settings = self.settings.lock_or_recover("settings").clone();
         std::fs::create_dir_all(&settings.download_dir).map_err(|error| RunError {
             code: "permission_denied".into(),
             message: format!("无法创建下载目录：{error}"),
@@ -787,7 +768,10 @@ impl Queue {
             };
             let selector = match &quality.audio_format_id {
                 Some(audio) => format!("{}+{}{}", task.format_id, audio, extra_audio),
-                None => format!("{}+bestaudio[ext=m4a]/bestaudio{}", task.format_id, extra_audio),
+                None => format!(
+                    "{}+bestaudio[ext=m4a]/bestaudio{}",
+                    task.format_id, extra_audio
+                ),
             };
             command.arg("-f").arg(selector);
             if !extra_audio.is_empty() {
@@ -1614,7 +1598,8 @@ fn map_download_error(stderr: &str, exit_code: Option<i32>) -> RunError {
     };
     let message = if code == "risk_control" {
         log::warn!("yt-dlp 下载命中风控：{}", stderr.trim());
-        "B 站触发了访问频率校验（HTTP 412 / -352）。请减少同时进行的解析与下载，稍后重试。".to_string()
+        "B 站触发了访问频率校验（HTTP 412 / -352）。请减少同时进行的解析与下载，稍后重试。"
+            .to_string()
     } else {
         let message = stderr
             .lines()
@@ -1924,7 +1909,10 @@ mod tests {
         // 任何档位都必须满足「每任务每秒不超过 10 个进度事件」。
         for active in [0usize, 1, 5, 6, 15, 16, 50, 200] {
             let per_second = 1000.0 / progress_interval_for(active).as_millis() as f64;
-            assert!(per_second <= 10.0, "{active} 并发时每任务 {per_second} 事件/秒");
+            assert!(
+                per_second <= 10.0,
+                "{active} 并发时每任务 {per_second} 事件/秒"
+            );
         }
     }
 

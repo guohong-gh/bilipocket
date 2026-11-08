@@ -377,7 +377,8 @@ mod tests {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap_or_default()
             .as_nanos();
-        let root = std::env::temp_dir().join(format!("bilipocket-fence-{}-{stamp}", std::process::id()));
+        let root =
+            std::env::temp_dir().join(format!("bilipocket-fence-{}-{stamp}", std::process::id()));
         let inside = root.join("nested");
         let outside = std::env::temp_dir().join(format!(
             "{}-outside",
@@ -391,7 +392,10 @@ mod tests {
         assert!(within_allowed_roots(&inside.join("video.mp4"), &roots));
         assert!(within_allowed_roots(&inside, &roots));
         assert!(!within_allowed_roots(&outside, &roots));
-        assert!(!within_allowed_roots(&root.join("..").join("missing"), &roots));
+        assert!(!within_allowed_roots(
+            &root.join("..").join("missing"),
+            &roots
+        ));
 
         let _ = std::fs::remove_dir_all(&root);
         let _ = std::fs::remove_dir_all(&outside);

@@ -129,7 +129,10 @@ fn parse_season(data: &Value) -> Option<SeasonInfo> {
             let bvid = episode
                 .get("bvid")
                 .and_then(Value::as_str)
-                .or_else(|| arc.and_then(|value| value.get("bvid")).and_then(Value::as_str))
+                .or_else(|| {
+                    arc.and_then(|value| value.get("bvid"))
+                        .and_then(Value::as_str)
+                })
                 .map(str::trim)
                 .filter(|value| !value.is_empty());
             let Some(bvid) = bvid else { continue };
@@ -652,7 +655,9 @@ fn build_matrix(value: &Value, duration_seconds: Option<u64>) -> Result<QualityM
                 used_labels.insert(base_label.clone());
                 base_label
             };
-            let selected = streams.get(&qn).and_then(|items| pick_stream(items.as_slice()));
+            let selected = streams
+                .get(&qn)
+                .and_then(|items| pick_stream(items.as_slice()));
             let bandwidth =
                 selected.and_then(|stream| stream.get("bandwidth").and_then(Value::as_u64));
             let size_bytes = if accessible.contains(&qn) {
@@ -707,11 +712,7 @@ fn view_error(body: &Value, endpoint: &str) -> MetaError {
 }
 
 /// 带 WBI 签名的 view 端点。风控类失败会以 `RiskControl` 返回，由 `fetch_view` 降级。
-fn fetch_view_wbi(
-    client: &Client,
-    bvid: &str,
-    cookie: Option<&str>,
-) -> Result<Value, MetaError> {
+fn fetch_view_wbi(client: &Client, bvid: &str, cookie: Option<&str>) -> Result<Value, MetaError> {
     let mixin_key = cached_mixin_key(client, cookie)?;
     let mut params = BTreeMap::new();
     params.insert("bvid".into(), bvid.to_string());
@@ -908,11 +909,7 @@ pub fn apply_quality_matrix(probe: &mut VideoProbe, matrix: &QualityMatrix) {
     // 避免高码率档抢占引擎唯一返回的那一路流，把基础档误判为“引擎不支持”。
     heuristic_indices.sort_by_key(|index| {
         let hint = &matrix.hints[*index];
-        (
-            hint.height,
-            if hint.fps >= 50.0 { 1 } else { 0 },
-            hint.qn,
-        )
+        (hint.height, if hint.fps >= 50.0 { 1 } else { 0 }, hint.qn)
     });
     for index in heuristic_indices {
         if let Some(position) = video_options
@@ -1173,7 +1170,10 @@ mod tests {
             ]
         });
         let pages = parse_pages(&view);
-        assert_eq!(pages.iter().map(|p| p.index).collect::<Vec<_>>(), vec![1, 2, 3]);
+        assert_eq!(
+            pages.iter().map(|p| p.index).collect::<Vec<_>>(),
+            vec![1, 2, 3]
+        );
         assert_eq!(pages[2].title, "P3");
     }
 
@@ -1566,7 +1566,8 @@ mod tests {
 
         let mut probe = probe_with_480();
         let mut video = probe.qualities[0].clone();
-        video.format_id = "999".into();        video.label = "1080P".into();
+        video.format_id = "999".into();
+        video.label = "1080P".into();
         video.width = Some(1920);
         video.height = Some(1080);
         video.fps = Some(30.0);
@@ -1588,7 +1589,11 @@ mod tests {
         assert!(base.accessible);
         assert_eq!(base.format_id, "999");
         assert!(!plus.accessible);
-        assert!(plus.reason.as_deref().unwrap_or_default().contains("大会员"));
+        assert!(plus
+            .reason
+            .as_deref()
+            .unwrap_or_default()
+            .contains("大会员"));
     }
 
     #[test]

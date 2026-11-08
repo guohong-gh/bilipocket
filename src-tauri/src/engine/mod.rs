@@ -1,3 +1,8 @@
+use flate2::read::{DeflateDecoder, GzDecoder, ZlibDecoder};
+use reqwest::header::{HeaderValue, ACCEPT_ENCODING, CONTENT_ENCODING, REFERER, USER_AGENT};
+use serde::Deserialize;
+use serde_json::Value;
+use sha2::{Digest, Sha256};
 use std::{
     collections::BTreeMap,
     env,
@@ -8,11 +13,6 @@ use std::{
     sync::{RwLock, RwLockReadGuard},
     time::Duration,
 };
-use flate2::read::{DeflateDecoder, GzDecoder, ZlibDecoder};
-use reqwest::header::{HeaderValue, ACCEPT_ENCODING, CONTENT_ENCODING, REFERER, USER_AGENT};
-use serde::Deserialize;
-use serde_json::Value;
-use sha2::{Digest, Sha256};
 use thiserror::Error;
 
 use crate::domain::{
@@ -80,53 +80,53 @@ pub struct Engine {
 }
 
 fn discover_inner(resource_dir: Option<&Path>) -> EngineInner {
-        let dev_override = cfg!(debug_assertions);
-        let mut integrity_message = None;
-        let yt_dlp = discover_binary(
-            YTDLP_ENV,
-            "yt-dlp",
-            &["yt-dlp.exe", "yt-dlp", "yt-dlp-x86_64-pc-windows-msvc.exe"],
-            resource_dir,
-        )
-        .and_then(|path| {
-            if dev_override {
-                return Some(path);
-            }
-            match verify_binary(&path, "yt-dlp") {
-                Ok(()) => Some(path),
-                Err(error) => {
-                    integrity_message = Some(error);
-                    None
-                }
-            }
-        });
-        let ffmpeg = discover_binary(
-            FFMPEG_ENV,
-            "ffmpeg",
-            &["ffmpeg.exe", "ffmpeg", "ffmpeg-x86_64-pc-windows-msvc.exe"],
-            resource_dir,
-        )
-        .and_then(|path| {
-            if dev_override {
-                return Some(path);
-            }
-            match verify_binary(&path, "ffmpeg") {
-                Ok(()) => Some(path),
-                Err(error) => {
-                    integrity_message.get_or_insert(error);
-                    None
-                }
-            }
-        });
-        let yt_dlp_version = yt_dlp.as_deref().and_then(read_version);
-        let ffmpeg_version = ffmpeg.as_deref().and_then(read_version);
-        EngineInner {
-            yt_dlp,
-            ffmpeg,
-            yt_dlp_version,
-            ffmpeg_version,
-            integrity_message,
+    let dev_override = cfg!(debug_assertions);
+    let mut integrity_message = None;
+    let yt_dlp = discover_binary(
+        YTDLP_ENV,
+        "yt-dlp",
+        &["yt-dlp.exe", "yt-dlp", "yt-dlp-x86_64-pc-windows-msvc.exe"],
+        resource_dir,
+    )
+    .and_then(|path| {
+        if dev_override {
+            return Some(path);
         }
+        match verify_binary(&path, "yt-dlp") {
+            Ok(()) => Some(path),
+            Err(error) => {
+                integrity_message = Some(error);
+                None
+            }
+        }
+    });
+    let ffmpeg = discover_binary(
+        FFMPEG_ENV,
+        "ffmpeg",
+        &["ffmpeg.exe", "ffmpeg", "ffmpeg-x86_64-pc-windows-msvc.exe"],
+        resource_dir,
+    )
+    .and_then(|path| {
+        if dev_override {
+            return Some(path);
+        }
+        match verify_binary(&path, "ffmpeg") {
+            Ok(()) => Some(path),
+            Err(error) => {
+                integrity_message.get_or_insert(error);
+                None
+            }
+        }
+    });
+    let yt_dlp_version = yt_dlp.as_deref().and_then(read_version);
+    let ffmpeg_version = ffmpeg.as_deref().and_then(read_version);
+    EngineInner {
+        yt_dlp,
+        ffmpeg,
+        yt_dlp_version,
+        ffmpeg_version,
+        integrity_message,
+    }
 }
 
 /// 结构化问题。`detail` 只用固定文案，不带路径——诊断导出会把该结构原样序列化。
@@ -566,7 +566,8 @@ fn map_probe_failure(stderr: &str, exit_code: Option<i32>) -> EngineError {
         "engine_failed"
     };
     let message = if code == "risk_control" {
-        "B 站触发了访问频率校验（HTTP 412 / -352）。请减少同时进行的解析与下载，稍后重试。".to_string()
+        "B 站触发了访问频率校验（HTTP 412 / -352）。请减少同时进行的解析与下载，稍后重试。"
+            .to_string()
     } else {
         let message = text
             .lines()
@@ -846,7 +847,12 @@ fn parse_audio_tracks(value: &Value) -> Vec<AudioTrack> {
             continue;
         }
         // 只收录纯音频流；视频流里的 language 字段没有意义。
-        if format.get("vcodec").and_then(Value::as_str).unwrap_or("none") != "none" {
+        if format
+            .get("vcodec")
+            .and_then(Value::as_str)
+            .unwrap_or("none")
+            != "none"
+        {
             continue;
         }
         let label = format
@@ -1361,7 +1367,10 @@ mod tests {
         let checksum = engine_problem(&empty(Some("hash mismatch"))).unwrap();
         assert_eq!(checksum.code, "checksumFailed");
         assert_eq!(checksum.remedy, Remedy::Recheck);
-        assert!(!checksum.detail.contains("hash mismatch"), "detail 必须是固定文案");
+        assert!(
+            !checksum.detail.contains("hash mismatch"),
+            "detail 必须是固定文案"
+        );
     }
 
     #[test]
@@ -1422,7 +1431,11 @@ mod tests {
         assert!(!http.message().contains("Precondition"));
 
         assert_eq!(
-            map_probe_failure("ERROR: Unable to download JSON metadata: code=-352", Some(1)).code(),
+            map_probe_failure(
+                "ERROR: Unable to download JSON metadata: code=-352",
+                Some(1)
+            )
+            .code(),
             "risk_control"
         );
         // 含 vip 字样但仍是被风控拦下时，风控优先，避免误导成"需要大会员"。

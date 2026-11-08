@@ -209,7 +209,9 @@ fn with_page_index(source_url: &str, index: u32) -> Result<String, CommandError>
         .collect();
     parsed.query_pairs_mut().clear();
     parsed.query_pairs_mut().extend_pairs(pairs);
-    parsed.query_pairs_mut().append_pair("p", &index.to_string());
+    parsed
+        .query_pairs_mut()
+        .append_pair("p", &index.to_string());
     Ok(parsed.to_string())
 }
 
@@ -776,9 +778,12 @@ pub async fn engine_refresh(
 ) -> CommandResult<crate::domain::EngineInfo> {
     let resource_dir = app.path().resource_dir().ok();
     let engine = state.engine.clone();
-    let info = tauri::async_runtime::spawn_blocking(move || engine.refresh(resource_dir.as_deref()))
-        .await
-        .map_err(|error| CommandError::new("engine_failed", format!("引擎校验异常：{error}")))?;
+    let info =
+        tauri::async_runtime::spawn_blocking(move || engine.refresh(resource_dir.as_deref()))
+            .await
+            .map_err(|error| {
+                CommandError::new("engine_failed", format!("引擎校验异常：{error}"))
+            })?;
     log::info!(
         "引擎重新校验：available={} problem={:?}",
         info.available,
@@ -820,7 +825,10 @@ mod tests {
     #[test]
     fn accepts_well_formed_section_ranges() {
         assert_eq!(validate_section("00:00:00", "00:01:30").unwrap(), (0, 90));
-        assert_eq!(validate_section("01:02:03", "02:00:00").unwrap(), (3723, 7200));
+        assert_eq!(
+            validate_section("01:02:03", "02:00:00").unwrap(),
+            (3723, 7200)
+        );
     }
 
     #[test]

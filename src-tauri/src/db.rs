@@ -1125,10 +1125,7 @@ mod tests {
         failed.status = TaskStatus::Failed;
         failed.error_message = Some("下载失败".into());
         assert!(!db
-            .update_task_if_status_in(
-                &failed,
-                &[TaskStatus::Probing, TaskStatus::Downloading],
-            )
+            .update_task_if_status_in(&failed, &[TaskStatus::Probing, TaskStatus::Downloading],)
             .unwrap());
 
         let mut renamed = task.clone();

@@ -93,13 +93,19 @@ pub fn write_nfo(
     if let Some(plot) = task.bvid.as_deref() {
         xml.push_str(&format!("  <uniqueid type=\"bvid\">{plot}</uniqueid>\n"));
     }
-    xml.push_str(&format!("  <studio>{}</studio>\n", xml_escape(&task.uploader)));
+    xml.push_str(&format!(
+        "  <studio>{}</studio>\n",
+        xml_escape(&task.uploader)
+    ));
     if let Some(timestamp) = published_at.filter(|value| *value > 0) {
         let date = crate::files::format_date(timestamp.saturating_mul(1000));
         xml.push_str(&format!("  <aired>{date}</aired>\n"));
         xml.push_str(&format!("  <premiered>{date}</premiered>\n"));
     }
-    if let Some(thumb) = cover.and_then(|path| path.file_name()).and_then(|n| n.to_str()) {
+    if let Some(thumb) = cover
+        .and_then(|path| path.file_name())
+        .and_then(|n| n.to_str())
+    {
         xml.push_str(&format!("  <thumb>{}</thumb>\n", xml_escape(thumb)));
     }
     xml.push_str(&format!("</{root}>\n"));
@@ -122,7 +128,10 @@ fn ffmetadata(chapters: &[Chapter]) -> String {
         text.push_str("[CHAPTER]\nTIMEBASE=1/1000\n");
         text.push_str(&format!("START={}\n", chapter.start_seconds * 1000));
         text.push_str(&format!("END={}\n", chapter.end_seconds * 1000));
-        text.push_str(&format!("title={}\n", chapter.title.replace(['\n', '\r', '='], " ")));
+        text.push_str(&format!(
+            "title={}\n",
+            chapter.title.replace(['\n', '\r', '='], " ")
+        ));
     }
     text
 }
@@ -141,10 +150,7 @@ pub fn write_chapters(
         return Err("未找到 ffmpeg".into());
     };
     let dir = video.parent().ok_or("无法取得视频目录")?;
-    let meta = dir.join(format!(
-        ".chapters-{}.txt",
-        uuid::Uuid::new_v4().simple()
-    ));
+    let meta = dir.join(format!(".chapters-{}.txt", uuid::Uuid::new_v4().simple()));
     let temp_output = dir.join(format!(
         ".chapters-{}.{}",
         uuid::Uuid::new_v4().simple(),
@@ -189,7 +195,9 @@ pub fn subtitle_language_mismatch(subtitle: &Path, expected: &str) -> bool {
     let Some(name) = subtitle.file_name().and_then(|n| n.to_str()) else {
         return false;
     };
-    let language = name.strip_suffix(".srt").or_else(|| name.strip_suffix(".ass"));
+    let language = name
+        .strip_suffix(".srt")
+        .or_else(|| name.strip_suffix(".ass"));
     match language.and_then(|n| n.rsplit_once('.')) {
         Some((_, lang)) => !lang.eq_ignore_ascii_case(expected),
         None => false,
@@ -219,10 +227,7 @@ mod tests {
 
     #[test]
     fn detects_subtitle_language_mismatch() {
-        assert!(subtitle_language_mismatch(
-            Path::new("v.zh-Hans.srt"),
-            "en"
-        ));
+        assert!(subtitle_language_mismatch(Path::new("v.zh-Hans.srt"), "en"));
         assert!(!subtitle_language_mismatch(
             Path::new("v.zh-Hans.srt"),
             "zh-Hans"
@@ -298,7 +303,10 @@ mod tests {
         let poster = copy_cover(Some(&source_text), &video, "poster", true)
             .unwrap()
             .expect("应产出封面");
-        assert_eq!(poster.file_name().and_then(|n| n.to_str()), Some("视频-poster.jpg"));
+        assert_eq!(
+            poster.file_name().and_then(|n| n.to_str()),
+            Some("视频-poster.jpg")
+        );
 
         let stem = copy_cover(Some(&source_text), &video, "stem", true)
             .unwrap()
@@ -328,9 +336,15 @@ mod tests {
         let xml = std::fs::read_to_string(&path).unwrap();
         // 单 P 用 movie 根节点，标题必须转义。
         assert!(xml.contains("<movie>"), "{xml}");
-        assert!(xml.contains("<title>A &amp; B &lt;tag&gt;</title>"), "{xml}");
+        assert!(
+            xml.contains("<title>A &amp; B &lt;tag&gt;</title>"),
+            "{xml}"
+        );
         assert!(xml.contains("<aired>"), "应写入播出日期：{xml}");
-        assert!(xml.contains("<uniqueid type=\"bvid\">BV1xx411c7mD</uniqueid>"), "{xml}");
+        assert!(
+            xml.contains("<uniqueid type=\"bvid\">BV1xx411c7mD</uniqueid>"),
+            "{xml}"
+        );
 
         // 多 P 用 episodedetails，并按 page 来源取标题。
         let mut multi = sample_task("总标题");

@@ -606,7 +606,6 @@ pub fn probe_writable(dir: &Path) -> Result<(), WriteProbeError> {
     }
 }
 
-
 pub fn prune_empty_download_dir(parent: &Path, download_root: &Path) -> Result<bool, String> {
     let metadata = match std::fs::symlink_metadata(parent) {
         Ok(metadata) => metadata,
@@ -641,10 +640,7 @@ mod tests {
 
     #[test]
     fn probe_writable_creates_and_removes_file() {
-        let dir = std::env::temp_dir().join(format!(
-            "bilipocket-probe-{}",
-            uuid::Uuid::new_v4()
-        ));
+        let dir = std::env::temp_dir().join(format!("bilipocket-probe-{}", uuid::Uuid::new_v4()));
         assert_eq!(probe_writable(&dir), Ok(()));
         // 探针不能留下任何文件。
         let leftovers = std::fs::read_dir(&dir)
@@ -664,10 +660,7 @@ mod tests {
 
     #[test]
     fn write_probe_errors_have_stable_codes() {
-        assert_eq!(
-            WriteProbeError::PermissionDenied.code(),
-            "dir_not_writable"
-        );
+        assert_eq!(WriteProbeError::PermissionDenied.code(), "dir_not_writable");
         assert_eq!(WriteProbeError::Unavailable.code(), "dir_unavailable");
         // 消息里不能出现路径。
         assert!(!WriteProbeError::Io("拒绝访问".into())
@@ -703,7 +696,10 @@ mod tests {
         };
         assert_eq!(render_template("{date}", &vars), "2023-11-14");
         assert_eq!(render_template("{date:%Y%m%d}", &vars), "20231114");
-        assert_eq!(render_template("{date:%Y-%m-%d_%H%M}", &vars), "2023-11-14_2213");
+        assert_eq!(
+            render_template("{date:%Y-%m-%d_%H%M}", &vars),
+            "2023-11-14_2213"
+        );
         assert_eq!(render_template("{pubdate:%Y%m%d}", &vars), "20200913");
         assert_eq!(render_template("{p}_{p_title}", &vars), "3_第三集");
         // 未知格式符原样保留，不 panic。
@@ -978,13 +974,8 @@ mod tests {
             std::fs::write(path, b"x").unwrap();
         }
 
-        let cleanup = remove_download_files(
-            &video.to_string_lossy(),
-            &[],
-            false,
-            Some("poster"),
-        )
-        .unwrap();
+        let cleanup =
+            remove_download_files(&video.to_string_lossy(), &[], false, Some("poster")).unwrap();
         assert_eq!(cleanup.removed, 2);
         assert!(!poster.exists());
         // 命名偏好是 poster 时，与视频同名的图片可能属于用户，不能删。

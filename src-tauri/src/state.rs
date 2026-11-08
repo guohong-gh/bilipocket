@@ -4,8 +4,7 @@ use std::{
 };
 
 use crate::{
-    auth::AuthManager, db::Db, domain::Settings, engine::Engine, queue::Queue,
-    util::LockExt,
+    auth::AuthManager, db::Db, domain::Settings, engine::Engine, queue::Queue, util::LockExt,
 };
 
 pub struct AppState {
@@ -20,9 +19,7 @@ pub struct AppState {
 
 impl AppState {
     pub fn settings(&self) -> Settings {
-        self.settings
-            .lock_or_recover("settings")
-            .clone()
+        self.settings.lock_or_recover("settings").clone()
     }
 
     pub fn set_settings(&self, settings: Settings) {
