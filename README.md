@@ -80,6 +80,10 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 
 ## 安装与使用
 
+### 直接下载
+
+从 [Releases](https://github.com/guohong-gh/bilipocket/releases/latest) 下载 `BiliPocket_x.y.z_x64-setup.exe`，双击安装即可。安装包已内置 yt-dlp 与 ffmpeg，不需要另外配置引擎。如果 Releases 里还没有可用版本，按下一节从源码构建。
+
 ### 环境要求
 
 | 依赖 | 版本 |
@@ -114,11 +118,9 @@ npm run build              # NSIS 安装包
 npm run package:portable   # 便携 zip（禁用自动更新，手动替换版本）
 ```
 
-> 干净克隆未放置引擎时，上面两条命令会因缺少 bundle resource 失败，CI 中对应步骤已自动跳过。当前没有可下载的 Release 安装包，克隆源码后需先按下方说明放置引擎，才能产出可运行程序。
+> 干净克隆需要先补齐引擎：`npm run fetch:sidecars` 会从引擎 Release 下载，并按 `ENGINE_MANIFEST.json` 校验 SHA-256，本地已就位且哈希匹配时直接跳过。未补齐时上面两条命令会因缺少 bundle resource 失败——这是有意行为，不允许用空文件凑出一个装不上引擎的包。
 
-sidecar 可执行文件（yt-dlp / ffmpeg）不入库，首次构建或首次推送前需按 `src-tauri/binaries/ENGINE_MANIFEST.json` 人工放到位，`npm run verify:sidecars` 会校验 SHA-256。干净克隆未放置引擎时，`.github/workflows/verify.yml` 会自动跳过依赖 sidecar 的 E2E、打包与产物上传步骤，其余检查照常运行；`release.yml` 在打 tag 时仍要求引擎就位。
-
-> **[待确认 T4]** 两个 exe 均为定制构建（PyInstaller one-file / gyan.dev essentials），清单里只有来源首页与 SHA-256，**没有可直接下载的直链**，仓库内也没有 provision 脚本。已决定先推送源码、托管形态日后补齐；仓库因此不含任何二进制，CI 的打包链路在干净克隆上保持跳过。手工放置时按 `src-tauri/binaries/ENGINE_MANIFEST.json` 的文件名与 SHA-256 就位，再用 `npm run verify:sidecars` 校验。详见下方「待确认事项」表。
+sidecar 可执行文件（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch:sidecars` 从 Release 资产 `engines-2026.10` 拉取并校验。干净克隆未补齐引擎时，`.github/workflows/verify.yml` 会自动跳过依赖 sidecar 的 E2E、打包与产物上传步骤，其余检查照常运行。
 
 ### 首次启动
 
@@ -244,14 +246,13 @@ cd src-tauri && cargo test --lib && cargo clippy --lib --tests
 
 ## 待确认事项（首次公开前）
 
-> 以下条目无法由仓库内容自动确定，已在对应位置用 `[待确认 Tn]` 就地标注。填写后请删除该标记与表中对应行。已销项 T1、T2、T3、T8、T10、T11、T12；T4 已决定「先推送后补」，具体托管形态仍待定。
+> 以下条目无法由仓库内容自动确定，已在对应位置用 `[待确认 Tn]` 就地标注。填写后请删除该标记与表中对应行。已销项 T1、T2、T3、T4、T8、T10、T11、T12（T4 定为「引擎走 Release 资产托管 + 构建时按哈希拉取」）。
 
 | 编号 | 事项 | 当前值 / 位置 | 未确认的后果 |
 |---|---|---|---|
-| T4 | **sidecar 托管形态**（已决定先推送后补；入库 / Git LFS / Release asset / 构建时供给待选） | `src-tauri/binaries/ENGINE_MANIFEST.json`（仅首页与哈希，无直链）、上文打包说明、`RELEASE.md` §4 | 干净克隆无法一键打包、CI 打包链路跳过；不阻塞推送源码 |
 | T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` | `.github/workflows/release.yml` | 签名发布不可用 |
 | T6 | updater 公私钥是否配对、私钥口令 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | 更新包签名无法验证 |
-| T7 | GPL-3.0 FFmpeg 分发合规（完整对应源码 / 书面要约 / H.264·AAC 专利）或改用 LGPL 构建 | `RELEASE.md` §1、`LICENSES/THIRD_PARTY.md` | 不阻塞推送源码；阻塞把二进制入库或发布 Release |
+| T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建需提供完整对应源码或书面要约；或改用 LGPL 构建 | `RELEASE.md` §1、`LICENSES/THIRD_PARTY.md` | 不阻塞推送源码；**发布 Release 前必须落实** |
 | T9 | Rust crates 完整依赖许可清单 | `LICENSES/THIRD_PARTY.md` | 第三方许可不完整 |
 
 ---
