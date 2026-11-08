@@ -58,12 +58,7 @@ jobs:
           New-Item -ItemType File -Force -Path src-tauri/binaries/ffmpeg-x86_64-pc-windows-msvc.exe | Out-Null
           Write-Host "Empty placeholders created solely to satisfy bundle.resources validation."
 
-      # Known pre-existing debt: 10 files / 46 hunks differ from rustfmt's default
-      # use_small_heuristics. Reformatting them would rewrite core logic files, which is a
-      # deliberate standalone change rather than part of this hardening pass, so this gate
-      # reports the drift without blocking the run. Clear it with `cargo fmt --all` in src-tauri.
       - name: Rust format
-        continue-on-error: true
         working-directory: src-tauri
         run: cargo fmt --all -- --check
       - name: Rust tests
