@@ -13,7 +13,9 @@
   <img alt="license" src="https://img.shields.io/badge/license-MIT-3DA639" />
 </p>
 
-![下载页：解析结果与清晰度矩阵](docs/screenshots/result.png)
+![下载页界面演示：解析结果与清晰度矩阵（演示数据）](docs/screenshots/result.png)
+
+> 本文所有截图都取自浏览器演示入口（`npm run dev:web`），其中的视频信息、封面与进度均为**演示数据**，不是真实解析或下载的结果，也不会写入任何文件。
 
 ---
 
@@ -76,13 +78,21 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 |---|---|
 | ![下载选项](docs/screenshots/advanced-options.png) | ![暗色](docs/screenshots/result-dark.png) |
 
-> 截图取自浏览器演示入口（`npm run dev:web`），其中的视频信息、封面与进度均为**演示数据**，不写入任何文件。
+> 四张图同样来自演示入口，数据说明见文首。
 
 ## 安装与使用
 
-### 直接下载
+### 获取安装包
 
-从 [Releases](https://github.com/guohong-gh/bilipocket/releases/latest) 下载 `BiliPocket_x.y.z_x64-setup.exe`，双击安装即可。安装包已内置 yt-dlp 与 ffmpeg，不需要另外配置引擎。如果 Releases 里还没有可用版本，按下一节从源码构建。
+从 [Releases](https://github.com/guohong-gh/bilipocket/releases/latest) 下载：
+
+| 文件 | 说明 |
+|---|---|
+| [`BiliPocket_0.9.0_x64-setup.exe`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64-setup.exe) | NSIS 安装包，已内置 yt-dlp 与 ffmpeg，双击安装即可 |
+| [`BiliPocket_0.9.0_x64_portable.zip`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64_portable.zip) | 便携版，解压即用，数据全部留在解压目录的 `app-data/` 下 |
+
+> 安装包**未做 Authenticode 签名**，首次运行可能触发 SmartScreen 提示；**自动更新暂不可用**（更新源未配置），升级需要下载新版本手动覆盖。
+> 也可以按下面「从源码运行」和「打包」两节自行构建，产物路径同上，文件名固定为 `BiliPocket_<版本>_x64-setup.exe`。
 
 ### 环境要求
 
@@ -251,7 +261,7 @@ cd src-tauri && cargo test --lib && cargo clippy --lib --tests
 | 编号 | 事项 | 当前值 / 位置 | 未确认的后果 |
 |---|---|---|---|
 | T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` | `.github/workflows/release.yml` | 签名发布不可用 |
-| T6 | updater 公私钥是否配对、私钥口令 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | 更新包签名无法验证 |
+| T6 | updater 私钥：`tauri.conf.json` 里已配置公钥，但配套私钥在本机与 CI secrets 中都不存在 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | v0.9.0 未产出 `.sig` 与 `latest.json`，`verify:release` 报 `missing updater signature`；自动更新（更新源本就为空）保持禁用 |
 | T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建需提供完整对应源码或书面要约；或改用 LGPL 构建 | `RELEASE.md` §1、`LICENSES/THIRD_PARTY.md` | 不阻塞推送源码；**发布 Release 前必须落实** |
 | T9 | Rust crates 完整依赖许可清单 | `LICENSES/THIRD_PARTY.md` | 第三方许可不完整 |
 
