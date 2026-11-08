@@ -15,7 +15,7 @@ They are bundled unmodified next to the application executable.
 
 - Project: https://ffmpeg.org/
 - Build: https://www.gyan.dev/ffmpeg/builds/ (essentials build, GPL enabled)
-- License: GNU General Public License v3 (see `GPL-3.0.txt`)
+- License: GNU General Public License v3 (see `FFmpeg-GPL-3.0.txt`)
 - Local file: `ffmpeg-x86_64-pc-windows-msvc.exe`
 - SHA-256: `2ce797a0f88d7f067180338fb227f7b1928ea727bd9a4d7a1d022f7c52af71a3`
 - Source code for this build is obtainable from https://ffmpeg.org/download.html and https://www.gyan.dev/ffmpeg/builds/. BiliPocket invokes FFmpeg as a separate process for muxing and audio conversion; the application source is separate from the FFmpeg binary.

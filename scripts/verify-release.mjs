@@ -163,7 +163,7 @@ check(sidecarCheck.status === 0, "sidecar hash verification failed");
 
 for (const path of [
   join(root, "LICENSES", "THIRD_PARTY.md"),
-  join(root, "LICENSES", "GPL-3.0.txt"),
+  join(root, "LICENSES", "FFmpeg-GPL-3.0.txt"),
 ]) {
   check(existsSync(path), `missing license notice: ${path}`);
 }
