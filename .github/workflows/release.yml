@@ -19,6 +19,10 @@ jobs:
           cache: npm
       - uses: dtolnay/rust-toolchain@stable
       - run: npm ci
+      - name: Provision bundled engines
+        env:
+          BILIPOCKET_ENGINES_URL: https://github.com/${{ github.repository }}/releases/download/engines-2026.10
+        run: node scripts/fetch-sidecars.mjs
       - name: Verify release version
         shell: pwsh
         run: |
