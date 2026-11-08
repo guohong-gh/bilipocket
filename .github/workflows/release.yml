@@ -42,8 +42,6 @@ jobs:
           }
       - name: Verify pinned sidecars
         run: node scripts/verify-sidecars.mjs
-      - name: Configure update endpoint
-        run: npm run set:update-source -- "https://github.com/${{ github.repository }}/releases/latest/download/latest.json"
       - name: Detect updater signing key
         id: signing
         shell: pwsh
@@ -56,6 +54,9 @@ jobs:
             exit 0
           }
           "enabled=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+      - name: Configure update endpoint
+        if: steps.signing.outputs.enabled == 'true'
+        run: npm run set:update-source -- "https://github.com/${{ github.repository }}/releases/latest/download/latest.json"
       - name: Import Windows signing certificate
         shell: pwsh
         env:
@@ -71,7 +72,7 @@ jobs:
           $password = ConvertTo-SecureString $env:WINDOWS_CERTIFICATE_PASSWORD -AsPlainText -Force
           $cert = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $password
           "WINDOWS_CERTIFICATE_THUMBPRINT=$($cert.Thumbprint)" | Out-File -FilePath $env:GITHUB_ENV -Append
-      - name: Build signed release
+      - name: Build release
         shell: pwsh
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
