@@ -84,7 +84,7 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 
 ### 获取安装包
 
-从 [Releases](https://github.com/guohong-gh/bilipocket/releases/latest) 下载：
+从 [Releases](https://github.com/guohong-gh/bilipocket/releases) 下载（0.x 版本均标记为 pre-release）：
 
 | 文件 | 说明 |
 |---|---|
