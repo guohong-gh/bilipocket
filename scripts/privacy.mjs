@@ -17,6 +17,11 @@ function isUnder(child, parent) {
   return child.toLowerCase().startsWith(`${parent.toLowerCase()}\\`);
 }
 
+// Windows 上 rustc 会把部分源码路径记成 8.3 短名（C:\Users\RUNNER~1\CARGO~1\...），
+// 长名前缀的 --remap-path-prefix 匹配不到它。因此除了精确的 home 前缀，
+// 再把整个 C:\Users 兜底映射一次；精确前缀先注册，短名才会落到兜底规则上。
+const WINDOWS_USERS = "C:\\Users";
+
 export function privatePathMappings(env = process.env, root = process.cwd()) {
   const home = normalizePath(env.USERPROFILE || homedir());
   const mappings = [];
@@ -42,6 +47,9 @@ export function privatePathMappings(env = process.env, root = process.cwd()) {
     add(path, `${BUILD_HOME}\\${target}`);
   }
   add(home, BUILD_HOME);
+  if (home && home.toLowerCase().startsWith(`${WINDOWS_USERS.toLowerCase()}\\`)) {
+    add(WINDOWS_USERS, BUILD_HOME);
+  }
   return mappings;
 }
 
