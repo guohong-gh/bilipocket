@@ -8,7 +8,7 @@ This file lists optional external steps required before publishing a signed buil
 - `src-tauri/binaries/ffmpeg-x86_64-pc-windows-msvc.exe` — currently a GPL-enabled FFmpeg build. For public distribution either:
   - comply with GPL (include complete corresponding source and notices), or
   - replace with an LGPL-compatible build after legal review.
-- Engines never enter Git history. Publish them once as assets of a dedicated release tagged `engines-2026.10` (the two `.exe` files only, no source archive). `node scripts/fetch-sidecars.mjs` then downloads them, verifies SHA-256 against `ENGINE_MANIFEST.json`, and is a no-op when the local copies already match. `.github/workflows/release.yml` runs it before building, so a tag push produces a self-contained installer with no manual file placement.
+- Engines never enter Git history. Publish them once as assets of a dedicated release tagged `engines-2026.10` (the two `.exe` files only, no source archive) and **mark it as a pre-release**: that keeps `releases/latest` — and therefore the updater endpoint `/releases/latest/download/latest.json` — pointing at the application release instead of the engine bundle. `node scripts/fetch-sidecars.mjs` then downloads them by exact file name, verifies SHA-256 against `ENGINE_MANIFEST.json`, and is a no-op when the local copies already match. `.github/workflows/release.yml` runs it before building, so a tag push produces a self-contained installer with no manual file placement.
 - Run `node scripts/verify-sidecars.mjs` after provisioning and before every build.
 - Keep `LICENSES/FFmpeg-GPL-3.0.txt`, `LICENSES/THIRD_PARTY.md` in the installer resources.
 - Review H.264/AAC patent obligations for your distribution territory.
