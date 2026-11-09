@@ -4,7 +4,7 @@
 
 <h1 align="center">BiliPocket</h1>
 
-<p align="center">本地优先的哔哩哔哩下载器 · 下载、队列、后处理全在自己的机器上完成</p>
+<p align="center">把想留的 B 站视频存到本地。解析、排队、下载、后处理，全在你自己的机器上跑完。</p>
 
 <p align="center">
   <img alt="platform" src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D4" />
@@ -13,59 +13,57 @@
   <img alt="license" src="https://img.shields.io/badge/license-MIT-3DA639" />
 </p>
 
-![下载页界面演示：解析结果与清晰度矩阵（演示数据）](docs/screenshots/result.png)
-
-> 本文所有截图都取自浏览器演示入口（`npm run dev:web`），其中的视频信息、封面与进度均为**演示数据**，不是真实解析或下载的结果，也不会写入任何文件。
+![下载页：真实解析结果与清晰度矩阵](docs/screenshots/result.png)
 
 ---
 
-## 项目简介
+## 这是什么
 
-BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也能下公开内容，登录后只访问你账号本身已有的权限**——不包含会员绕过、DRM 破解或反爬规避。
+一个 Windows 桌面版的哔哩哔哩下载器。不登录也能下公开内容；登录之后，也只使用你账号本来就有的权限——没有会员绕过，没有 DRM 破解，也不跟风控躲猫猫。
 
-技术上是一个 Tauri 2 应用：Rust 负责网络、队列、进程与落盘，前端是没有构建步骤的原生 ESM，直接由 WebView 加载。
+技术上没什么魔法：Tauri 2 做外壳，Rust 管网络、队列、进程和落盘，界面是原生 ESM 直接塞进 WebView，没有打包器，也没有框架，改一行刷新就能看到。
 
-**它做什么**
+**它干的事**
 
-- 解析视频页、`b23.tv` 短链、BV 号与 av 号，列出真实可用的清晰度档位
-- 把选中的视频加进队列，并发下载、断点续传、失败重试、随时暂停
-- 下载完成后在本地补齐封面、字幕、弹幕、章节、NFO、多音轨
+- 视频页、`b23.tv` 短链、BV 号、av 号，粘进去就能解析
+- 队列并发 1–5、全局限速、断点续传、失败重试、随时暂停
+- 下完自动补齐封面、字幕、弹幕、章节、NFO、多音轨
 
-**它不做什么**
+**它不干的事**
 
-- 不遍历收藏夹、UP 主空间、番剧、排行榜、搜索页（这是定位约束，不是未实现）
-- 不破解会员或付费内容，不做风控绕过
-- 不上传任何数据，不需要账号体系之外的云端服务
+- 不遍历收藏夹、UP 主空间、番剧、排行榜、搜索页。这是产品定位，不是还没做
+- 不碰会员和付费内容，不做反爬规避
+- 不上传任何数据。除了哔哩哔哩自己的接口，它谁也不连
 
-## 功能特点
+## 细节
 
 **解析**
 
-- 视频页 / `b23.tv` 短链 / BV 号 / av 号，粘贴即可
-- 清晰度矩阵取 `support_formats` 与当前会话 DASH 流求并集，未登录时灰显无权限档位并说明原因
-- 同一 BV 下的分 P 用标准 `?p=N` 逐个入队；视频所属合集可在结果页按需勾选，**只解析一次，不产生列表翻页请求**
+- 四种输入都认：视频页、`b23.tv` 短链、裸 BV 号、av 号
+- 清晰度取 `support_formats` 和当前会话 DASH 流的并集。没登录时没有权限的档位灰显，原因直接写在下面——"登录后可下载"、"大会员专享"，不让你猜
+- 同一条 BV 的分 P 用标准 `?p=N` 逐个入队；视频属于某个合集时，可以在结果页按需勾选。**只解析一次，不会偷偷翻页拉列表**
 
 **下载**
 
-- 队列支持并发数（1–5）、全局限速、优先级、全部暂停/继续
-- 任务级重试（次数与退避可配）+ 分片级重试，命中 412 / -352 时按 30/90/180 秒退避
-- 断点续传；任务级进度节流按并发数自适应，避免高频 IPC
-- 片段下载（`HH:MM:SS` 区间），与断点续传互斥
+- 队列能调并发（1–5）、限速、优先级，支持全部暂停 / 继续
+- 任务级重试（次数和退避可配）加切片级重试；撞上 412 或 -352 就按 30/90/180 秒退避
+- 断点续传可用；任务级进度事件按并发数自适应节流，避免高频 IPC 把界面拖卡
+- 支持只下一段（`HH:MM:SS` 区间），和断点续传互斥
 
-**后处理**（只操作已落盘文件，失败不影响任务成功状态）
+**后处理**（只动已经落盘的文件，失败不会把任务状态改成失败）
 
-- 封面：`-poster.jpg` 或与视频同名，删除任务时一并清理
-- 字幕：外挂 SRT / ASS，语言与格式可选
-- 弹幕：按类型导出
-- 章节：从 `view_points` 生成，MKV/MP4 统一走一次 ffmpeg 封装
-- NFO：`movie` / `episodedetails` 双根节点，标题来源可选
-- 多音轨：`--audio-multistreams`，只收带语言标签的轨道
+- 封面存成 `-poster.jpg` 或与视频同名，删任务时一起清掉
+- 字幕出外挂 SRT / ASS，语言和格式可选
+- 弹幕按类型导出
+- 章节从 `view_points` 生成，MKV / MP4 统一走一次 ffmpeg 封装
+- NFO 用 `movie` / `episodedetails` 双根节点，标题来源可选
+- 多音轨走 `--audio-multistreams`，只收带语言标签的轨
 
 **其它**
 
-- 扫码登录，凭据存 Windows 凭据库；会话过期自动清理并提示
-- 文件名模板支持 `{title}` `{up}` `{quality}` `{bvid}` `{date:格式}` `{p}` 等，统一清洗非法字符、Windows 保留名与超长路径
-- 引擎自诊断（yt-dlp / ffmpeg 版本与可用性）、脱敏诊断包导出
+- 扫码登录，凭据进 Windows 凭据库；会话过期会自己清理并提醒
+- 文件名模板认 `{title}` `{up}` `{quality}` `{bvid}` `{date:格式}` `{p}` 这些占位符，非法字符、Windows 保留名、超长路径统一清洗
+- 引擎自诊断（yt-dlp / ffmpeg 的版本和可用性），能导出脱敏诊断包
 - 托盘、单实例、窗口尺寸记忆、完成通知、暗色主题
 
 ## 界面
@@ -78,21 +76,18 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 |---|---|
 | ![下载选项](docs/screenshots/advanced-options.png) | ![暗色](docs/screenshots/result-dark.png) |
 
-> 四张图同样来自演示入口，数据说明见文首。
+> 这几张都是桌面版跑出来的实拍，没换数据、没修图。示例是一条 1 分 17 秒的面食视频，挂在 175 集的合集下。第一张里 4K 和 1080P60 标着「大会员专享」、1080P 和 720P 标着「登录后可下载」——没登录就是这个样子，界面不会假装它们可用。
 
-## 安装与使用
+## 装起来
 
-### 获取安装包
-
-从 [Releases](https://github.com/guohong-gh/bilipocket/releases) 下载（0.x 版本均标记为 pre-release）：
+从 [Releases](https://github.com/guohong-gh/bilipocket/releases) 拿安装包。0.x 版本都标着 pre-release，看重稳定的话建议自己编译：
 
 | 文件 | 说明 |
 |---|---|
-| [`BiliPocket_0.9.0_x64-setup.exe`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64-setup.exe) | NSIS 安装包，已内置 yt-dlp 与 ffmpeg，双击安装即可 |
-| [`BiliPocket_0.9.0_x64_portable.zip`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64_portable.zip) | 便携版，解压即用，数据全部留在解压目录的 `app-data/` 下 |
+| [`BiliPocket_0.9.0_x64-setup.exe`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64-setup.exe) | 安装版，双击装，yt-dlp 和 ffmpeg 已经打在里面 |
+| [`BiliPocket_0.9.0_x64_portable.zip`](https://github.com/guohong-gh/bilipocket/releases/download/v0.9.0/BiliPocket_0.9.0_x64_portable.zip) | 便携版，解压即用，数据全留在解压目录的 `app-data/` 下 |
 
-> 首次运行若出现 SmartScreen 提示，点「更多信息 → 仍要运行」即可。本版不带自动更新，升级时下载新版本覆盖安装。
-> 也可以按下面「从源码运行」和「打包」两节自行构建，产物路径同上，文件名固定为 `BiliPocket_<版本>_x64-setup.exe`。
+> 首次运行如果弹 SmartScreen，点「更多信息 → 仍要运行」即可。这个版本没有自动更新，升级需要自己下新版覆盖安装。
 
 ### 环境要求
 
@@ -101,42 +96,42 @@ BiliPocket 是一个 Windows 桌面端的哔哩哔哩下载器。**不登录也�
 | Node.js | 18+ |
 | Rust | stable（Windows 用 MSVC toolchain） |
 | MSVC Build Tools | 打包 Windows 安装包时需要 |
-| WebView2 Runtime | Windows 11 自带，Windows 10 可能需要手动安装 |
+| WebView2 Runtime | Windows 11 自带，Windows 10 可能要手动装 |
 
-### 从源码运行
+### 从源码跑
 
 ```bash
 git clone https://github.com/guohong-gh/bilipocket.git bilipocket
 cd bilipocket
 npm install
 
-# 桌面应用（会自动起静态服务并打开 Tauri 窗口）
+# 桌面应用（自动起静态服务并打开 Tauri 窗口）
 npm run dev
 
-# 仅浏览器预览（演示入口，改界面时更快）
+# 只开浏览器预览（改界面时更快，数据是假的）
 npm run dev:web    # http://localhost:1420/dev/
 ```
 
-> 两个命令都会占用 1420 端口。已经单独跑了 `dev:web` 时先停掉，否则 `npm run dev` 会报端口冲突。
+> 两个命令都占 1420 端口。`dev:web` 还开着的时候跑 `npm run dev`，会直接报端口冲突。
 
-> `npm run dev` 只启动窗口，不打包 bundle resources；未放置 sidecar 时界面可用，但解析与下载依赖的本地引擎不可用（debug 构建可使用临时引擎，见 `SECURITY.md`）。
+> `npm run dev` 只起窗口，不打包 bundle resources。没放 sidecar 时界面照常能用，但解析和下载依赖的本地引擎不可用（debug 构建可以用临时引擎，见 `SECURITY.md`）。
 
 ### 打包
 
 ```bash
 npm run build              # NSIS 安装包
-npm run package:portable   # 便携 zip（禁用自动更新，手动替换版本）
+npm run package:portable   # 便携 zip（关掉自动更新，手动换版本）
 ```
 
-> 干净克隆需要先补齐引擎：`npm run fetch:sidecars` 会从引擎 Release 下载，并按 `ENGINE_MANIFEST.json` 校验 SHA-256，本地已就位且哈希匹配时直接跳过。未补齐时上面两条命令会因缺少 bundle resource 失败——这是有意行为，不允许用空文件凑出一个装不上引擎的包。
+> 干净克隆得先补引擎：`npm run fetch:sidecars` 会从引擎 Release 下载，按 `ENGINE_MANIFEST.json` 校验 SHA-256，本地已有且哈希对得上就直接跳过。没补齐时上面两条命令会因为缺 bundle resource 直接失败——这是故意的，不接受用空文件凑出一个装不上引擎的包。
 
-sidecar 可执行文件（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch:sidecars` 从 Release 资产 `engines-2026.10` 拉取并校验。干净克隆未补齐引擎时，`.github/workflows/verify.yml` 会自动跳过依赖 sidecar 的 E2E、打包与产物上传步骤，其余检查照常运行。
+sidecar（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch:sidecars` 从 Release 资产 `engines-2026.10` 拉取校验。干净克隆没补引擎时，`.github/workflows/verify.yml` 会跳过依赖 sidecar 的 E2E、打包和产物上传，其余检查照跑。
 
-### 首次启动
+### 第一次打开
 
-1. 选择下载目录（可跳过，用默认目录）
-2. 可选扫码登录——不登录也能下载公开、免费内容
-3. 粘贴链接 → 选清晰度 → 加入队列
+1. 选个下载目录（也可以跳过，用默认的）
+2. 想登就扫码登录——不登录一样能下公开的、免费的内容
+3. 粘链接 → 挑清晰度 → 加入队列
 
 ## 目录结构
 
@@ -177,7 +172,7 @@ sidecar 可执行文件（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch
 └─ RELEASE.md SECURITY.md     发布清单与安全说明
 ```
 
-**前端模块分层**（`src/js/app/`）
+**前端分层**（`src/js/app/`）
 
 | 层 | 模块 |
 |---|---|
@@ -188,7 +183,7 @@ sidecar 可执行文件（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch
 | 外壳 | `router.js` `chrome.js` `shell.js` `platform.js` `theme.js` |
 | 账号 | `auth.js` |
 
-模块之间允许循环导入：函数声明在模块实例化阶段就已就绪，而所有调用都发生在加载之后。
+模块之间是允许循环导入的：函数声明在模块实例化阶段就绪，而所有调用都发生在加载之后。
 
 ## 技术栈
 
@@ -209,9 +204,9 @@ sidecar 可执行文件（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch
 | `npm run verify:sidecars` | 校验 sidecar 版本与 SHA-256 |
 | `cargo test --lib` | Rust 单元测试 |
 
-当前基线：`cargo test --lib` 123 通过 / 2 忽略、`clippy` 源码零告警、`tsc` 零错误、前端单测 42 项、Playwright 18 项。
+当前基线：`cargo test --lib` 123 通过 / 2 忽略，`clippy` 源码零告警，`tsc` 零错误，前端单测 42 项，Playwright 18 项。
 
-## 下载产物的文件布局
+## 下载下来的东西长什么样
 
 ```text
 <下载目录>/
@@ -223,27 +218,27 @@ sidecar 可执行文件（yt-dlp / ffmpeg）不入库，统一由 `npm run fetch
    └─ 视频标题-弹幕/           弹幕（可选，按类型分文件）
 ```
 
-删除任务时勾选「删除文件」会一并清理 sidecar；视频文件夹只在为空时移除，**下载根目录永远不会被删除**。
+删任务时勾「删除文件」，这些 sidecar 会一起清掉。视频文件夹只在空的时候移除，**下载根目录永远不删**。
 
-## 合规与边界
+## 边界
 
-- 仅用于你拥有或已获授权的内容；请遵守哔哩哔哩的服务条款与当地法律
-- 不含 DRM 破解、付费内容绕过、反爬规避；命中风控只做识别、退避与提示
-- 与哔哩哔哩官方无关
-- 内置 FFmpeg 为 GPL 构建，以独立进程调用，许可与来源见 [`LICENSES/THIRD_PARTY.md`](LICENSES/THIRD_PARTY.md)
+- 只用来下载你拥有或已获授权的内容，同时遵守哔哩哔哩的服务条款和当地法律
+- 不含 DRM 破解、付费内容绕过、反爬规避。撞上风控只做识别、退避和提示，硬刚的事不干
+- 和哔哩哔哩官方没有任何关系
+- 内置的 FFmpeg 是 GPL 构建，以独立进程调用。许可、来源与对应源码见 [`LICENSES/THIRD_PARTY.md`](LICENSES/THIRD_PARTY.md) 与 [`LICENSES/FFMPEG_SOURCE_OFFER.md`](LICENSES/FFMPEG_SOURCE_OFFER.md)
 
 ## 已知限制
 
-- **仅支持 Windows**。非 Windows 平台当前无法编译，跨平台评估结论与代价见 [`docs/CROSS_PLATFORM_ASSESSMENT.md`](docs/CROSS_PLATFORM_ASSESSMENT.md)
-- 未签名发布，首次运行可能触发 SmartScreen 提示；未配置更新源时自动更新区域会自动隐藏
-- 高频解析或并发下载可能触发平台访问频率校验，此时靠退避重试，没有主动的请求间隔下限
-- 章节写入需要 ffmpeg 二次封装，大文件会多花一些时间
-- 浏览器入口（`dev/`）是纯模拟：不能选目录、不能发通知，也不写任何文件
-- 窗口状态只记忆尺寸与最大化，不恢复窗口位置
+- **只支持 Windows**。非 Windows 现在编译不过，跨平台的代价算过一遍，结论在 [`docs/CROSS_PLATFORM_ASSESSMENT.md`](docs/CROSS_PLATFORM_ASSESSMENT.md)
+- 未签名发布，首次运行可能触发 SmartScreen；没配更新源时，自动更新那块会自己藏起来
+- 高频解析或并发下载可能触发平台的访问频率校验，目前靠退避重试，没有主动的请求间隔下限
+- 写章节要用 ffmpeg 二次封装，大文件会多花一点时间
+- 浏览器入口（`dev/`）是纯模拟：选不了目录、发不了通知，也不写任何文件
+- 窗口状态只记尺寸和最大化，不恢复位置
 
 ## 贡献
 
-欢迎 issue 与 PR。提交前请先读 [`CONTRIBUTING.md`](CONTRIBUTING.md)，并确保以下命令全绿：
+Issue 和 PR 都欢迎。动手前请先看 [`CONTRIBUTING.md`](CONTRIBUTING.md)，并确保这几条是绿的：
 
 ```bash
 npm run typecheck && npm run test:unit && npm run test:ui
@@ -252,19 +247,19 @@ cd src-tauri && cargo test --lib && cargo clippy --lib --tests
 
 ## 许可证
 
-源代码采用 [MIT](LICENSE)。随包分发的 yt-dlp（The Unlicense）与 FFmpeg（GPL-3.0）保留各自许可，详见 [`LICENSES/THIRD_PARTY.md`](LICENSES/THIRD_PARTY.md)；FFmpeg 的对应源码与书面要约见 [`LICENSES/FFMPEG_SOURCE_OFFER.md`](LICENSES/FFMPEG_SOURCE_OFFER.md)。
+源代码是 [MIT](LICENSE)。随包分发的 yt-dlp（The Unlicense）和 FFmpeg（GPL-3.0）保留各自的许可，细节见 [`LICENSES/THIRD_PARTY.md`](LICENSES/THIRD_PARTY.md)；FFmpeg 的对应源码和书面要约在 [`LICENSES/FFMPEG_SOURCE_OFFER.md`](LICENSES/FFMPEG_SOURCE_OFFER.md)。
 
-## 待确认事项（首次公开前）
+## 还没定的事（首次公开前）
 
-> 以下条目无法由仓库内容自动确定，已在对应位置用 `[待确认 Tn]` 就地标注。填写后请删除该标记与表中对应行。已销项 T1、T2、T3、T4、T8、T10、T11、T12（T4 定为「引擎走 Release 资产托管 + 构建时按哈希拉取」）。
+> 这些条目没法从仓库内容自动判断，已经在对应位置用 `[待确认 Tn]` 标好了。填完请删掉标记和表里那一行。已销项 T1、T2、T3、T4、T8、T10、T11、T12（T4 定为「引擎走 Release 资产托管 + 构建时按哈希拉取」）。
 
 | 编号 | 事项 | 当前值 / 位置 | 未确认的后果 |
 |---|---|---|---|
-| T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` 均未配置 | `.github/workflows/release.yml`：缺私钥时自动降级为未签名发布，跳过 `.sig`、`latest.json` 与 `verify:release` 的签名项 | 签名发布不可用；流水线仍能产出未签名包 |
-| T6 | updater 私钥：`tauri.conf.json` 里已配置公钥，但配套私钥在本机与 CI secrets 中都不存在 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | v0.9.0 未产出 `.sig` 与 `latest.json`，`verify:release` 报 `missing updater signature`；自动更新（更新源本就为空）保持禁用 |
-| T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建需提供完整对应源码或书面要约 | `LICENSES/FFMPEG_SOURCE_OFFER.md`（对应源码地址、完整 `configure` 参数、三年书面要约） | v0.9.0 已随包分发该构建，文档义务已补齐；要彻底消除风险需换 LGPL 构建，代价是重做 sidecar 哈希并重新发布 |
-| T9 | Rust crates 完整依赖许可清单 | `LICENSES/THIRD_PARTY.md` | 第三方许可不完整 |
+| T5 | CI secrets：`WINDOWS_CERTIFICATE*` / `TAURI_SIGNING_PRIVATE_KEY*` 都还没配 | `.github/workflows/release.yml`：缺私钥时自动降级为未签名发布，跳过 `.sig`、`latest.json` 和 `verify:release` 的签名项 | 签名发布不可用；流水线仍能产出未签名包 |
+| T6 | updater 私钥：`tauri.conf.json` 里配了公钥，但配套私钥在本机和 CI secrets 里都不存在 | `src-tauri/tauri.conf.json` 的 `plugins.updater.pubkey` | v0.9.0 没产出 `.sig` 和 `latest.json`，`verify:release` 报 `missing updater signature`；自动更新（更新源本来就是空的）保持禁用 |
+| T7 | GPL-3.0 FFmpeg 分发合规：随包分发 GPL 构建，需要提供完整对应源码或书面要约 | `LICENSES/FFMPEG_SOURCE_OFFER.md`（对应源码地址、完整 `configure` 参数、三年书面要约） | v0.9.0 已经随包分发，文档义务补齐了；想彻底没这个包袱就得换 LGPL 构建，代价是重做 sidecar 哈希并重新发版 |
+| T9 | Rust crates 完整依赖许可清单 | `LICENSES/THIRD_PARTY.md` | 第三方许可清单不完整 |
 
 ---
 
-<p align="center"><sub>BiliPocket 与哔哩哔哩无关联。请仅下载你有权获取的内容。</sub></p>
+<p align="center"><sub>BiliPocket 与哔哩哔哩无关联。请只下载你有权获取的内容。</sub></p>
