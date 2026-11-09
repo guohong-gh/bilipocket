@@ -797,17 +797,16 @@
                       <div class="about-title">
                         <h2>BiliPocket</h2>
                         <span class="version-pill">v0.9.0</span>
-                        <span class="proto-pill">REAL ENGINE · BETA</span>
                       </div>
-                      <p>轻量、本地优先的哔哩哔哩下载器桌面应用。</p>
-                      <div class="about-chips">
-                        <span><svg class="icon" aria-hidden="true"><use href="#i-monitor"></use></svg>Tauri 2 桌面壳</span>
-                        <span><svg class="icon" aria-hidden="true"><use href="#i-bolt"></use></svg>yt-dlp + ffmpeg</span>
-                        <span><svg class="icon" aria-hidden="true"><use href="#i-database"></use></svg>SQLite 本地队列</span>
-                        <span><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>系统凭据库</span>
-                      </div>
+                      <p>Windows 桌面端的哔哩哔哩下载器。解析、排队、下载、后处理都在本机完成。</p>
                     </div>
                   </div>
+                  <dl class="about-meta">
+                    <div><dt>版本</dt><dd>0.9.0</dd></div>
+                    <div><dt>引擎</dt><dd>yt-dlp · FFmpeg</dd></div>
+                    <div><dt>许可</dt><dd>MIT（源代码）</dd></div>
+                    <div><dt>平台</dt><dd>Windows 10 / 11</dd></div>
+                  </dl>
                 </section>
 
                 <section class="compliance-card">
@@ -823,7 +822,7 @@
                   <div class="compliance-grid">
                     <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>登录只用于访问你自己账号已有权限的内容</span>
                     <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>不绕过会员、付费内容、DRM 或平台风控</span>
-                    <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>不提供批量抓取或内容分发能力</span>
+                    <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>不做收藏夹、UP 主空间、番剧、排行榜、搜索页的批量抓取</span>
                     <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>下载文件只写入你选择的本地目录</span>
                   </div>
                 </section>
@@ -838,10 +837,12 @@
                       </div>
                     </div>
                     <ul class="about-list">
-                      <li><span>BV / av / b23 解析与按视频支持的清晰度选择</span></li>
-                      <li><span>真实 DASH 下载、暂停/继续/取消、断点续传与 ffmpeg 合并</span></li>
-                      <li><span>字幕 SRT 与按类型过滤的弹幕 XML sidecar</span></li>
-                      <li><span>SQLite 队列/历史、账号会话、主题、通知与托盘</span></li>
+                      <li><span>视频页、b23.tv 短链、BV 号、av 号解析</span></li>
+                      <li><span>按视频支持的清晰度选择，无权限档位灰显并注明原因</span></li>
+                      <li><span>合集按需勾选，分 P 逐个入队</span></li>
+                      <li><span>DASH 下载、暂停 / 继续 / 取消、断点续传、区间下载</span></li>
+                      <li><span>后处理：封面、字幕、弹幕、章节、NFO、多音轨</span></li>
+                      <li><span>SQLite 队列与历史、账号会话、主题、通知、托盘</span></li>
                     </ul>
                   </section>
 
@@ -849,7 +850,7 @@
                     <div class="about-card-head">
                       <span class="head-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg></span>
                       <div>
-                        <h3>引擎与数据边界</h3>
+                        <h3>数据边界</h3>
                         <p>本地引擎、本地队列、系统凭据</p>
                       </div>
                     </div>
@@ -858,6 +859,7 @@
                       <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>队列、历史与设置保存在本机 SQLite</span></li>
                       <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>扫码登录凭据存入 Windows 系统凭据库</span></li>
                       <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>yt-dlp / FFmpeg 版本与许可证随安装包提供</span></li>
+                      <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg><span>删除任务时，勾选「删除文件」才会清理附加文件</span></li>
                     </ul>
                   </section>
                 </div>

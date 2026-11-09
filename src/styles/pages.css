@@ -1918,10 +1918,29 @@
   font-size: var(--text-xs);
 }
 
-.proto-pill {
-  color: var(--ink-3);
+.about-meta {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 6px 24px;
+  flex: none;
+  margin: 0;
+}
+
+.about-meta > div {
+  display: flex;
+  gap: 10px;
   font-size: var(--text-xs);
-  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.about-meta dt {
+  color: var(--ink-3);
+}
+
+.about-meta dd {
+  margin: 0;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
 }
 
 .about-brand p {
@@ -1929,27 +1948,6 @@
   color: var(--ink-2);
   font-size: var(--text-base);
   line-height: var(--leading-body);
-}
-
-.about-chips {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  color: var(--ink-3);
-  font-size: var(--text-xs);
-}
-
-.about-chips span {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.about-chips .icon {
-  width: 13px;
-  height: 13px;
 }
 
 .compliance-card {
@@ -2247,6 +2245,11 @@
   .about-hero {
     flex-direction: column;
     gap: 16px;
+  }
+
+  .about-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 16px;
   }
 
   .settings-head {
